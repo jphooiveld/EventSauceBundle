@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<container
+        xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="jphooiveld_eventsauce.date_time_zone" class="DateTimeZone">
+            <argument>%jphooiveld_eventsauce.time_of_recording.timezone%</argument>
+        </service>
+
+        <service id="jphooiveld_eventsauce.clock.system" class="EventSauce\EventSourcing\Time\SystemClock">
+            <argument type="service" id="jphooiveld_eventsauce.date_time_zone"/>
+        </service>
+        <service id="jphooiveld_eventsauce.clock" alias="jphooiveld_eventsauce.clock.system"/>
+
+        <service id="jphooiveld_eventsauce.header.default" class="EventSauce\EventSourcing\DefaultHeadersDecorator" public="false">
+            <argument type="service" id="jphooiveld_eventsauce.inflector"/>
+            <argument type="service" id="jphooiveld_eventsauce.clock"/>
+            <tag name="eventsauce.message_decorator"/>
+        </service>
+
+        <service id="jphooiveld_eventsauce.message_decorator.chain" class="EventSauce\EventSourcing\MessageDecoratorChain" public="false">
+            <argument/>
+        </service>
+        <service id="jphooiveld_eventsauce.message_decorator" alias="jphooiveld_eventsauce.message_decorator.chain"/>
+    </services>
+</container>

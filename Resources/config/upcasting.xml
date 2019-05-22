@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<container
+        xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="jphooiveld_eventsauce.delegatable_upcaster.delegator" class="EventSauce\EventSourcing\Upcasting\DelegatingUpcaster" public="false">
+            <argument/>
+        </service>
+
+        <service id="jphooiveld_eventsauce.event_serializer.upcasting" class="EventSauce\EventSourcing\Serialization\UpcastingMessageSerializer" decorates="jphooiveld_eventsauce.mesage_serializer.constructing">
+            <argument type="service" id="jphooiveld_eventsauce.event_serializer.upcasting.inner"/>
+            <argument type="service" id="jphooiveld_eventsauce.delegatable_upcaster.delegator"/>
+        </service>
+    </services>
+</container>

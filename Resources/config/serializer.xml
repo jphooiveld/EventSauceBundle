@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<container
+        xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="jphooiveld_eventsauce.event_serializer.constructing" class="EventSauce\EventSourcing\Serialization\ConstructingEventSerializer"/>
+
+        <service id="jphooiveld_eventsauce.event_serializer" alias="jphooiveld_eventsauce.event_serializer.constructing"/>
+
+        <service id="jphooiveld_eventsauce.mesage_serializer.constructing" class="EventSauce\EventSourcing\Serialization\ConstructingMessageSerializer">
+            <argument type="service" id="jphooiveld_eventsauce.inflector"/>
+            <argument type="service" id="jphooiveld_eventsauce.event_serializer"/>
+        </service>
+
+        <service id="jphooiveld_eventsauce.mesage_serializer" alias="jphooiveld_eventsauce.mesage_serializer.constructing"/>
+    </services>
+</container>
