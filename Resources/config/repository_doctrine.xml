@@ -6,7 +6,7 @@
     <services>
         <service id="jphooiveld_eventsauce.message_repository.doctrine" class="EventSauce\DoctrineMessageRepository\DoctrineMessageRepository" public="false">
             <argument/>
-            <argument type="service" id="jphooiveld_eventsauce.mesage_serializer"/>
+            <argument type="service" id="jphooiveld_eventsauce.message_serializer"/>
             <argument>%jphooiveld_eventsauce.repository.doctrine.table%</argument>
         </service>
     </services>

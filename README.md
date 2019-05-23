@@ -14,13 +14,13 @@ Use composer to install the bundle into your symfony project.
     $ composer require jphooiveld/eventsauce-bundle
     
 If you want to use symfony messenger as dispatcher instead of the default dispatcher you must install 
-the composer package "symfony/messenger".
+the composer package **symfony/messenger**.
 
     $ composer require symfony/messenger
 
 
 If you want to use the console command to generate the database table for you, you must install the 
-composer package "symfony/console".    
+composer package **symfony/console**.    
 
     $ composer require symfony/console
 
@@ -97,7 +97,7 @@ class Order implements AggregateRoot
 }
 ```
 
-A compiler pass will automatically create a service called "jphooiveld_eventsauce.aggregate_repository.order". 
+A compiler pass will automatically create a service called **jphooiveld_eventsauce.aggregate_repository.order**. 
 After that you can bind it to a default parameter in your services yaml so you can inject it into your own services.
 
 ```yaml
@@ -158,3 +158,13 @@ Upcasters can transform messages in case events change. Every class that you cre
 
 All services used in the bundles are actually aliases to real implementations. If you want to override services all you 
 have to do is create your own services and override the aliases in the build method in your Kernel. 
+
+| Alias                                     |Interface                                                 |
+|-------------------------------------------|----------------------------------------------------------|
+| jphooiveld_eventsauce.message_dispatcher  | EventSauce\EventSourcing\MessageDispatcher               |
+| jphooiveld_eventsauce.clock               | EventSauce\EventSourcing\Time\Clock                      |
+| jphooiveld_eventsauce.message_decorator   | EventSauce\EventSourcing\MessageDecorator                |
+| jphooiveld_eventsauce.inflector           | EventSauce\EventSourcing\ClassNameInflector              |
+| jphooiveld_eventsauce.message_repository  | EventSauce\EventSourcing\MessageRepository               |
+| jphooiveld_eventsauce.event_serializer    | EventSauce\EventSourcing\Serialization\EventSerializer   |
+| jphooiveld_eventsauce.message_serializer  | EventSauce\EventSourcing\Serialization\MessageSerializer |

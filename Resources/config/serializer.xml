@@ -8,11 +8,11 @@
 
         <service id="jphooiveld_eventsauce.event_serializer" alias="jphooiveld_eventsauce.event_serializer.constructing"/>
 
-        <service id="jphooiveld_eventsauce.mesage_serializer.constructing" class="EventSauce\EventSourcing\Serialization\ConstructingMessageSerializer">
+        <service id="jphooiveld_eventsauce.message_serializer.constructing" class="EventSauce\EventSourcing\Serialization\ConstructingMessageSerializer">
             <argument type="service" id="jphooiveld_eventsauce.inflector"/>
             <argument type="service" id="jphooiveld_eventsauce.event_serializer"/>
         </service>
 
-        <service id="jphooiveld_eventsauce.mesage_serializer" alias="jphooiveld_eventsauce.mesage_serializer.constructing"/>
+        <service id="jphooiveld_eventsauce.message_serializer" alias="jphooiveld_eventsauce.message_serializer.constructing"/>
     </services>
 </container>
