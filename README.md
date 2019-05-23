@@ -141,8 +141,35 @@ EventSauce has a number of interfaces that are auto configured when this bundle 
 Consumers are responsinble for handling events from the aggregates. The message dispatcher is responsible for delegating the
 events to the consumers. Every class that you create and implements **EventSauce\EventSourcing\Consumer** will automatically 
 receive events from the message dispatcher. However if you intent to use Symfony messenger you must implement the __invoke
-method. To overcome this limitation you can use the ConsumableTrait provided in the bundle. This will make sure it will work
-with the default message dispatcher from EventSauce as wel as the symfony messenger component.
+method. To overcome this limitation you can use the **ConsumableTrait** provided in the bundle. This will make sure it will work
+with the default message dispatcher from EventSauce as wel as the symfony messenger component. The trait will also let consumer's
+handler the events the same way as the aggregate repository does. It will look for methods that start with apply and after that the
+name of the event. Let's say we have a **OrderCreated** class which is an event that indicated ther order was created. Now we 
+want to sent an email notifcation. For example:
+
+```php
+<?php
+
+namespace App\Service;
+
+use App\Event\OrderCreated;
+use EventSauce\EventSourcing\Consumer;
+use EventSauce\EventSourcing\Message;
+use Jphooiveld\Bundle\EventSauceBundle\ConsumableTrait;
+
+class SendMailNotification implements Consumer
+{
+        use ConsumableTrait;
+        
+        protected function applyOrderCreated(OrderCreated $event, Message $message)
+        {
+            // send mail
+        }
+}
+
+```
+
+
 
 ### Message decorators
 
@@ -159,12 +186,15 @@ Upcasters can transform messages in case events change. Every class that you cre
 All services used in the bundles are actually aliases to real implementations. If you want to override services all you 
 have to do is create your own services and override the aliases in the build method in your Kernel. 
 
+Beware that if you start to override services stuff can and will break because auto configuration uses a lot of the default
+implementations.
+
 | Alias                                     |Interface                                                 |
 |-------------------------------------------|----------------------------------------------------------|
 | jphooiveld_eventsauce.message_dispatcher  | EventSauce\EventSourcing\MessageDispatcher               |
 | jphooiveld_eventsauce.clock               | EventSauce\EventSourcing\Time\Clock                      |
 | jphooiveld_eventsauce.message_decorator   | EventSauce\EventSourcing\MessageDecorator                |
 | jphooiveld_eventsauce.inflector           | EventSauce\EventSourcing\ClassNameInflector              |
-| jphooiveld_eventsauce.message_repository  | EventSauce\EventSourcing\MessageRepository               |
 | jphooiveld_eventsauce.event_serializer    | EventSauce\EventSourcing\Serialization\EventSerializer   |
 | jphooiveld_eventsauce.message_serializer  | EventSauce\EventSourcing\Serialization\MessageSerializer |
+
