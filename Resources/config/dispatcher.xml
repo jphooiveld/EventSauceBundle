@@ -7,6 +7,6 @@
         <service id="jphooiveld_eventsauce.message_dispatcher.synchronous" class="EventSauce\EventSourcing\SynchronousMessageDispatcher">
             <argument/>
         </service>
-        <service id="jphooiveld_eventsauce.message_dispatcher"/>
+        <service id="jphooiveld_eventsauce.message_dispatcher" alias="jphooiveld_eventsauce.message_dispatcher.synchronous"/>
     </services>
 </container>

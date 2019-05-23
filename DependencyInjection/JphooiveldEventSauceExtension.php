@@ -35,20 +35,19 @@ final class JphooiveldEventSauceExtension extends Extension
         $loader->load('serializer.xml');
         $loader->load('upcasting.xml');
 
-        if ($config['message_dispatcher']['messenger']['enabled'] === true) {
+        if ($config['messenger']['enabled'] === true) {
             if (!interface_exists('Symfony\Component\Messenger\MessageBusInterface')) {
                 throw new LogicException('Symfony messenger dispatcher cannot be enabled as the component is not installed. Try running "composer require symfony/messenger".');
             }
 
             $loader->load('dispatcher_messenger.xml');
             $container->setAlias('jphooiveld_eventsauce.message_dispatcher', 'jphooiveld_eventsauce.message_dispatcher.messenger');
-            $container->registerForAutoconfiguration(Consumer::class)->addTag('messenger.message_handler', ['bus' => $config['message_dispatcher']['messenger']['service_bus']]);
+            $container->registerForAutoconfiguration(Consumer::class)->addTag('messenger.message_handler', ['bus' => $config['messenger']['service_bus']]);
 
             $definition = $container->getDefinition('jphooiveld_eventsauce.message_dispatcher.messenger');
-            $definition->setArgument(0, new Reference($config['message_dispatcher']['messenger']['service_bus']));
+            $definition->setArgument(0, new Reference($config['messenger']['service_bus']));
 
         } else {
-            $container->setAlias('jphooiveld_eventsauce.message_dispatcher', $config['message_dispatcher']['service']);
             $container->registerForAutoconfiguration(Consumer::class)->addTag('eventsauce.consumer');
         }
 
