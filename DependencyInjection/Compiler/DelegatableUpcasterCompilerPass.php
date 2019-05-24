@@ -15,11 +15,11 @@ final class DelegatableUpcasterCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('jphooiveld_eventsauce.delegatable_upcaster.delegator')) {
+        if (!$container->hasDefinition('jphooiveld_eventsauce.upcaster.delegating')) {
             return;
         }
 
-        $definition = $container->getDefinition('jphooiveld_eventsauce.delegatable_upcaster.delegator');
+        $definition = $container->getDefinition('jphooiveld_eventsauce.upcaster.delegating');
         $arguments  = [];
 
         foreach ($container->findTaggedServiceIds('eventsauce.delegatable_upcaster') as $id => $tags) {

@@ -94,6 +94,7 @@ use EventSauce\EventSourcing\AggregateRoot;
 
 class Order implements AggregateRoot
 {    
+    // code
 }
 ```
 
@@ -127,25 +128,27 @@ class AddOrderHandler
     {
         $this->orderRepository = $orderRepository;
     }
+    
+    // other code
 }
 ```
 
 If you don't want to autoconfigure your repositories you can turn this off and take care of it yourself.
 
-## Other auto configuration
+## Auto configuration
 
 EventSauce has a number of interfaces that are auto configured when this bundle is installed to make your life a lot easier.
 
 ### Consumers
 
-Consumers are responsinble for handling events from the aggregates. The message dispatcher is responsible for delegating the
+Consumers are responsible for handling events from the aggregates. The message dispatcher is responsible for delegating the
 events to the consumers. Every class that you create and implements **EventSauce\EventSourcing\Consumer** will automatically 
 receive events from the message dispatcher. However if you intent to use Symfony messenger you must implement the __invoke
 method. To overcome this limitation you can use the **ConsumableTrait** provided in the bundle. This will make sure it will work
 with the default message dispatcher from EventSauce as wel as the symfony messenger component. The trait will also let consumer's
 handler the events the same way as the aggregate repository does. It will look for methods that start with apply and after that the
 name of the event. Let's say we have a **OrderCreated** class which is an event that indicated ther order was created. Now we 
-want to sent an email notifcation. For example:
+want to sent an email notifcation. For example we can create a listener as follows:
 
 ```php
 <?php
@@ -154,22 +157,31 @@ namespace App\Service;
 
 use App\Event\OrderCreated;
 use EventSauce\EventSourcing\Consumer;
-use EventSauce\EventSourcing\Message;
 use Jphooiveld\Bundle\EventSauceBundle\ConsumableTrait;
 
 class SendMailNotification implements Consumer
 {
         use ConsumableTrait;
         
-        protected function applyOrderCreated(OrderCreated $event, Message $message)
+        private $mailer;
+        
+        public function __construct(\Swift_Mailer $mailer) 
         {
-            // send mail
+            $this->mailer = $mailer;
+        }
+        
+        protected function applyOrderCreated(OrderCreated $event)
+        {
+            $message = new \Swift_Message(); 
+            
+            // other code
+            
+            $this->mailer->send($message);
         }
 }
-
 ```
 
-
+Whenever an order is created the method applyOrderCreated will be called.
 
 ### Message decorators
 
@@ -189,12 +201,40 @@ have to do is create your own services and override the aliases in the build met
 Beware that if you start to override services stuff can and will break because auto configuration uses a lot of the default
 implementations.
 
-| Alias                                     |Interface                                                 |
-|-------------------------------------------|----------------------------------------------------------|
-| jphooiveld_eventsauce.message_dispatcher  | EventSauce\EventSourcing\MessageDispatcher               |
-| jphooiveld_eventsauce.clock               | EventSauce\EventSourcing\Time\Clock                      |
-| jphooiveld_eventsauce.message_decorator   | EventSauce\EventSourcing\MessageDecorator                |
-| jphooiveld_eventsauce.inflector           | EventSauce\EventSourcing\ClassNameInflector              |
-| jphooiveld_eventsauce.event_serializer    | EventSauce\EventSourcing\Serialization\EventSerializer   |
-| jphooiveld_eventsauce.message_serializer  | EventSauce\EventSourcing\Serialization\MessageSerializer |
+| Alias                                      |Interface                                                 | Breaks auto configuration |
+|--------------------------------------------|----------------------------------------------------------| --------------------------|
+| jphooiveld_eventsauce.clock                | EventSauce\EventSourcing\Time\Clock                      | no                        |
+| jphooiveld_eventsauce.event_serializer     | EventSauce\EventSourcing\Serialization\EventSerializer   | no                        |
+| jphooiveld_eventsauce.message_serializer   | EventSauce\EventSourcing\Serialization\MessageSerializer | no                        |
+| jphooiveld_eventsauce.upcaster             | EventSauce\EventSourcing\Upcasting\Upcaster              | yes                       |
+| jphooiveld_eventsauce.inflector            | EventSauce\EventSourcing\ClassNameInflector              | no                        |
+| jphooiveld_eventsauce.message_decorator    | EventSauce\EventSourcing\MessageDecorator                | yes                       |
+| jphooiveld_eventsauce.message_dispatcher   | EventSauce\EventSourcing\MessageDispatcher               | yes                       |
 
+Let's say you want to create your own class inflector called **App\EventSourcing\UnderscoreInflector** 
+that implements interface  **EventSauce\EventSourcing\ClassNameInflector**. The only thing you need to do is set the 
+alias in your kernel's build method and other dependent services will automatically use it.
+
+```php
+<?php
+
+namespace App;
+
+use App\EventSourcing\UnderscoreInflector;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Kernel as BaseKernel;
+
+class Kernel extends BaseKernel
+{
+    protected function build(ContainerBuilder $container)
+    {
+        $container->setAlias('jphooiveld_eventsauce.inflector', UnderscoreInflector::class);
+    }
+    
+    // other code
+}
+```
+
+# License
+
+This bundle is under the MIT license. See the complete license [in the bundle](LICENSE).

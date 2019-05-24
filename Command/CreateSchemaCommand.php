@@ -85,6 +85,8 @@ final class CreateSchemaCommand extends Command
             $this->connection->exec($query);
         }
 
+        $output->writeln(sprintf('Table %s created', $this->bag->get('jphooiveld_eventsauce.repository.doctrine.table')));
+
         return null;
     }
 }
