@@ -8,9 +8,7 @@
             <argument/>
         </service>
 
-        <service id="jphooiveld_eventsauce.upcaster" alias="jphooiveld_eventsauce.upcaster.delegating">
-            <argument/>
-        </service>
+        <service id="jphooiveld_eventsauce.upcaster" alias="jphooiveld_eventsauce.upcaster.delegating"/>
 
         <service id="jphooiveld_eventsauce.event_serializer.upcasting" class="EventSauce\EventSourcing\Serialization\UpcastingMessageSerializer" decorates="jphooiveld_eventsauce.message_serializer">
             <argument type="service" id="jphooiveld_eventsauce.event_serializer.upcasting.inner"/>
