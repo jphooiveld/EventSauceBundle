@@ -33,6 +33,8 @@ before_install:
 install:
     - if [[ "$COMPOSER_FLAGS" == *"--prefer-lowest"* ]]; then composer update --prefer-dist --no-interaction --prefer-stable --quiet; fi
     - composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction
+    - composer require symfony/console
+    - composer require symfony/messenger
 
 script:
     - ./vendor/bin/phpunit
