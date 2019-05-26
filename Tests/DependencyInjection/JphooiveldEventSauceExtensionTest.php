@@ -20,7 +20,7 @@ class JphooiveldEventSauceExtensionTest extends TestCase
         $loader        = new JphooiveldEventSauceExtension();
         $config        = $this->getDefaultConfig();
 
-        $loader->load(array($config), $configuration);
+        $loader->load([$config], $configuration);
 
         $this->assertEquals('jphooiveld_eventsauce.message_dispatcher.synchronous', (string)$configuration->getAlias('jphooiveld_eventsauce.message_dispatcher'));
         $this->assertEquals('jphooiveld_eventsauce.clock.system', (string)$configuration->getAlias('jphooiveld_eventsauce.clock'));
@@ -43,7 +43,7 @@ class JphooiveldEventSauceExtensionTest extends TestCase
 
         $config['time_of_recording']['timezone'] = 'Europe/Amsterdam';
 
-        $loader->load(array($config), $configuration);
+        $loader->load([$config], $configuration);
         $this->assertEquals('Europe/Amsterdam', $configuration->getParameter('jphooiveld_eventsauce.time_of_recording.timezone'));
     }
 
@@ -56,7 +56,7 @@ class JphooiveldEventSauceExtensionTest extends TestCase
         $loader        = new JphooiveldEventSauceExtension();
         $config        = $this->getDefaultConfig();
 
-        $loader->load(array($config), $configuration);
+        $loader->load([$config], $configuration);
         $this->assertEquals('jphooiveld_eventsauce.message_dispatcher.synchronous', (string)$configuration->getAlias('jphooiveld_eventsauce.message_dispatcher'));
         $this->assertFalse($configuration->hasDefinition('jphooiveld_eventsauce.message_dispatcher.messenger'));
 
@@ -81,7 +81,7 @@ class JphooiveldEventSauceExtensionTest extends TestCase
         $config['messenger']['enabled']     = true;
         $config['messenger']['service_bus'] = 'messenger.bus.foo';
 
-        $loader->load(array($config), $configuration);
+        $loader->load([$config], $configuration);
 
         $this->assertEquals('jphooiveld_eventsauce.message_dispatcher.messenger', (string)$configuration->getAlias('jphooiveld_eventsauce.message_dispatcher'));
 
@@ -111,7 +111,7 @@ class JphooiveldEventSauceExtensionTest extends TestCase
         $config['message_repository']['service']             = 'foo';
         $config['message_repository']['doctrine']['enabled'] = false;
 
-        $loader->load(array($config), $configuration);
+        $loader->load([$config], $configuration);
 
         $this->assertEquals('foo', (string)$configuration->getAlias('jphooiveld_eventsauce.message_repository'));
         $this->assertFalse($configuration->hasDefinition('jphooiveld_eventsauce.message_repository.doctrine'));
@@ -130,7 +130,7 @@ class JphooiveldEventSauceExtensionTest extends TestCase
         $config['message_repository']['service']           = 'foo';
         $config['message_repository']['doctrine']['table'] = 'bar';
 
-        $loader->load(array($config), $configuration);
+        $loader->load([$config], $configuration);
 
         $this->assertEquals('jphooiveld_eventsauce.message_repository.doctrine', (string)$configuration->getAlias('jphooiveld_eventsauce.message_repository'));
         $this->assertTrue($configuration->hasDefinition('jphooiveld_eventsauce.command.create_schema'));
@@ -146,7 +146,7 @@ class JphooiveldEventSauceExtensionTest extends TestCase
         $loader        = new JphooiveldEventSauceExtension();
         $config        = $this->getDefaultConfig();
 
-        $loader->load(array($config), $configuration);
+        $loader->load([$config], $configuration);
 
         $autoConfiguration = $configuration->getAutoconfiguredInstanceof();
 
@@ -168,7 +168,7 @@ class JphooiveldEventSauceExtensionTest extends TestCase
 
         $config['message_repository']['autoconfigure_aggregates'] = false;
 
-        $loader->load(array($config), $configuration);
+        $loader->load([$config], $configuration);
 
         $autoConfiguration = $configuration->getAutoconfiguredInstanceof();
 
