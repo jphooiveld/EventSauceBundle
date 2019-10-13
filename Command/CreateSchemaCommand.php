@@ -67,16 +67,17 @@ final class CreateSchemaCommand extends Command
 
         $schema = new Schema();
         $table = $schema->createTable($this->bag->get('jphooiveld_eventsauce.repository.doctrine.table'));
-        $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('event_id', 'guid');
         $table->addColumn('event_type', 'string', ['length' => 255]);
         $table->addColumn('aggregate_root_id', 'guid');
+        $table->addColumn('aggregate_root_version', 'integer');
         $table->addColumn('time_of_recording', 'datetime_immutable');
         $table->addColumn('payload', 'json_array', ['PlatformOptions' => ['jsonb' => true]]);
-        $table->setPrimaryKey(['id']);
+        $table->setPrimaryKey(['event_id']);
         $table->addIndex(['aggregate_root_id']);
         $table->addIndex(['time_of_recording']);
-        $table->addIndex(['aggregate_root_id', 'time_of_recording']);
+        $table->addIndex(['aggregate_root_id', 'aggregate_root_version']);
+        $table->addUniqueIndex(['aggregate_root_id', 'aggregate_root_version']);
 
         $platform = $this->connection->getDatabasePlatform();
         $queries  = $schema->toSql($platform);
