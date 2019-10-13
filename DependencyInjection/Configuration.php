@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jphooiveld\Bundle\EventSauceBundle\DependencyInjection;
 
+use EventSauce\EventSourcing\AggregateRoot;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -65,9 +66,14 @@ final class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                         ->end()
-                        ->booleanNode('autoconfigure_aggregates')
-                            ->info('Autoconfigure aggregate roots to use the default repository implemtations as created by the bundle. Turn this off if you want to create your own implementation.')
-                            ->defaultValue(true)
+                        ->arrayNode('aggregates')
+                            ->info('Autoconfigure provided aggregate roots.')
+                            ->scalarPrototype()
+                            ->validate()
+                                ->ifTrue(function ($value) {
+                                    return !is_a($value, AggregateRoot::class, true);
+                                })
+                                ->thenInvalid('Class %s must be valid class and implement interface EventSauce\EventSourcing\AggregateRoot')
                         ->end()
                     ->end()
                 ->end()

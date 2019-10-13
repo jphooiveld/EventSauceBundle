@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\Compiler;
 
+use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\ConstructingAggregateRootRepository;
 use LogicException;
 use ReflectionClass;
@@ -21,11 +22,7 @@ final class AggregateRepositoryCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if ($container->getParameter('jphooiveld_eventsauce.message_repository.autoconfigure_aggregates') === false) {
-            return;
-        }
-
-        foreach ($container->findTaggedServiceIds('eventsauce.aggregate_repository') as $className => $tags) {
+        foreach ($container->getParameter('jphooiveld_eventsauce.message_repository.aggregates') as $className) {
             $reflectionClass = new ReflectionClass($className);
             $shortClassName  = $reflectionClass->getShortName();
             $servicePostFix  = preg_replace('~(?<=\\w)([A-Z])~', '_$1', $shortClassName);

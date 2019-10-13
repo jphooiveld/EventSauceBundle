@@ -69,12 +69,7 @@ final class JphooiveldEventSauceExtension extends Extension
             }
         }
 
-        $container->setParameter('jphooiveld_eventsauce.message_repository.autoconfigure_aggregates', $config['message_repository']['autoconfigure_aggregates']);
-
-        if ($config['message_repository']['autoconfigure_aggregates'] === true) {
-            $container->registerForAutoconfiguration(AggregateRoot::class)->addTag('eventsauce.aggregate_repository');
-        }
-
+        $container->setParameter('jphooiveld_eventsauce.message_repository.aggregates', $config['message_repository']['aggregates']);
         $container->setParameter('jphooiveld_eventsauce.time_of_recording.timezone', $config['time_of_recording']['timezone']);
         $container->registerForAutoconfiguration(MessageDecorator::class)->addTag('eventsauce.message_decorator');
         $container->registerForAutoconfiguration(DelegatableUpcaster::class)->addTag('eventsauce.delegatable_upcaster');
