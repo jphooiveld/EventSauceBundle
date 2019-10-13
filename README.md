@@ -59,9 +59,9 @@ jphooiveld_event_sauce:
             connection: doctrine.dbal.default_connection
             # The table name in the database to store the messages.
             table: event
-        # Autoconfigure aggregate roots to use the default repository implemtations as created by the bundle. 
-        # Turn this off if you want to create your own implementation.
-        autoconfigure_aggregates: true
+        # Configure provided aggregate roots to use the default repository implementations as created by the bundle 
+        aggregates:
+            - App\Domain\Order
             
 ```
 
@@ -79,8 +79,8 @@ functioning application. But if you want to install another type of repository o
 easy to reference it in the service parameter. If doctrine is enabled (and it's by default) this will be
 ignored.
 
-Autoconfiguring aggregates is an easy way to bind your aggregates to a the doctrine message repository with
-default EventSauce services. A compiler pass created the services automatically internally so you can bind 
+Configuring aggregates is an easy way to bind your aggregates to a the doctrine message repository with
+default EventSauce services. A compiler pass creates the services automatically internally so you can bind 
 them to parameters in your services.yaml.
 
 Let's for example assume you have an aggregate root called Order
@@ -98,7 +98,8 @@ class Order implements AggregateRoot
 }
 ```
 
-A compiler pass will automatically create a service called **jphooiveld_eventsauce.aggregate_repository.order**. 
+If you add 'App\Domain\Order' to the list of aggregates in the configuration the compiler pass will 
+automatically create a service called **jphooiveld_eventsauce.aggregate_repository.order**.  
 After that you can bind it to a default parameter in your services yaml so you can inject it into your own services.
 
 ```yaml
@@ -133,7 +134,7 @@ class AddOrderHandler
 }
 ```
 
-If you don't want to autoconfigure your repositories you can turn this off and take care of it yourself.
+If you don't want to autoconfigure your repository then don't add it to the list and configue it yoursekf.
 
 ## Auto configuration
 
@@ -204,7 +205,7 @@ implementations.
 | Alias                                      |Interface                                                 | Breaks auto configuration |
 |--------------------------------------------|----------------------------------------------------------| --------------------------|
 | jphooiveld_eventsauce.clock                | EventSauce\EventSourcing\Time\Clock                      | no                        |
-| jphooiveld_eventsauce.event_serializer     | EventSauce\EventSourcing\Serialization\EventSerializer   | no                        |
+| jphooiveld_eventsauce.payload_serializer   | EventSauce\EventSourcing\Serialization\PayloadSerializer | no                        |
 | jphooiveld_eventsauce.message_serializer   | EventSauce\EventSourcing\Serialization\MessageSerializer | no                        |
 | jphooiveld_eventsauce.upcaster             | EventSauce\EventSourcing\Upcasting\Upcaster              | yes                       |
 | jphooiveld_eventsauce.inflector            | EventSauce\EventSourcing\ClassNameInflector              | no                        |
