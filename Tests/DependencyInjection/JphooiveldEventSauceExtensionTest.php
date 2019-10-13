@@ -27,7 +27,7 @@ class JphooiveldEventSauceExtensionTest extends TestCase
         $this->assertEquals('jphooiveld_eventsauce.message_decorator.chain', (string)$configuration->getAlias('jphooiveld_eventsauce.message_decorator'));
         $this->assertEquals('jphooiveld_eventsauce.inflector.dot_separated_snake_case', (string)$configuration->getAlias('jphooiveld_eventsauce.inflector'));
         $this->assertEquals('jphooiveld_eventsauce.message_repository.doctrine', (string)$configuration->getAlias('jphooiveld_eventsauce.message_repository'));
-        $this->assertEquals('jphooiveld_eventsauce.event_serializer.constructing', (string)$configuration->getAlias('jphooiveld_eventsauce.event_serializer'));
+        $this->assertEquals('jphooiveld_eventsauce.payload_serializer.constructing', (string)$configuration->getAlias('jphooiveld_eventsauce.payload_serializer'));
         $this->assertEquals('jphooiveld_eventsauce.message_serializer.constructing', (string)$configuration->getAlias('jphooiveld_eventsauce.message_serializer'));
         $this->assertEquals('jphooiveld_eventsauce.upcaster.delegating', (string)$configuration->getAlias('jphooiveld_eventsauce.upcaster'));
     }
