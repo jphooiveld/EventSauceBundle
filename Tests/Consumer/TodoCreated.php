@@ -2,9 +2,9 @@
 
 namespace Jphooiveld\Bundle\EventSauceBundle\Tests\Consumer;
 
-use EventSauce\EventSourcing\Serialization\SerializableEvent;
+use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
-class TodoCreated implements SerializableEvent
+class TodoCreated implements SerializablePayload
 {
     /**
      * @var int ID
@@ -30,7 +30,7 @@ class TodoCreated implements SerializableEvent
     /**
      * {@inheritDoc}
      */
-    public static function fromPayload(array $payload): SerializableEvent
+    public static function fromPayload(array $payload): SerializablePayload
     {
         $self       = new self();
         $self->id   = $payload['id'];
