@@ -137,44 +137,6 @@ class JphooiveldEventSauceExtensionTest extends TestCase
         $this->assertEquals('bar', $configuration->getParameter('jphooiveld_eventsauce.repository.doctrine.table'));
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function testAutoConfigureAggregatesOn()
-    {
-        $configuration = new ContainerBuilder();
-        $loader        = new JphooiveldEventSauceExtension();
-        $config        = $this->getDefaultConfig();
-
-        $loader->load([$config], $configuration);
-
-        $autoConfiguration = $configuration->getAutoconfiguredInstanceof();
-
-        $this->assertArrayHasKey(AggregateRoot::class, $autoConfiguration);
-
-        $definition = $autoConfiguration[AggregateRoot::class];
-
-        $this->assertTrue($definition->hasTag('eventsauce.aggregate_repository'));
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testAutoConfigureAggregatesOff()
-    {
-        $configuration = new ContainerBuilder();
-        $loader        = new JphooiveldEventSauceExtension();
-        $config        = $this->getDefaultConfig();
-
-        $config['message_repository']['autoconfigure_aggregates'] = false;
-
-        $loader->load([$config], $configuration);
-
-        $autoConfiguration = $configuration->getAutoconfiguredInstanceof();
-
-        $this->assertArrayNotHasKey(AggregateRoot::class, $autoConfiguration);
-    }
-
     private function getDefaultConfig()
     {
         $yaml = <<<EOF
@@ -189,7 +151,8 @@ message_repository:
         enabled: true
         connection: doctrine.dbal.default_connection
         table: event
-    autoconfigure_aggregates: true
+    aggregates:
+        - 'Jphooiveld\Bundle\EventSauceBundle\Tests\Aggregate\Order'
 EOF;
 
         return (new Parser())->parse($yaml);
