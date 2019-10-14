@@ -6,6 +6,8 @@ namespace Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\Compiler;
 
 use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\ConstructingAggregateRootRepository;
+use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
+use EventSauce\EventSourcing\Snapshotting\ConstructingAggregateRootRepositoryWithSnapshotting;
 use LogicException;
 use ReflectionClass;
 use ReflectionException;
@@ -22,30 +24,78 @@ final class AggregateRepositoryCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
+        $snapshotEnabled = $container->getParameter('jphooiveld_eventsauce.snapshot_repository.enabled');
+
         foreach ($container->getParameter('jphooiveld_eventsauce.message_repository.aggregates') as $className) {
-            $reflectionClass = new ReflectionClass($className);
-            $shortClassName  = $reflectionClass->getShortName();
-            $servicePostFix  = preg_replace('~(?<=\\w)([A-Z])~', '_$1', $shortClassName);
+            if (is_a($className, AggregateRoot::class, true)) {
+                $reflectionClass = new ReflectionClass($className);
+                $shortClassName  = $reflectionClass->getShortName();
+                $servicePostFix  = preg_replace('~(?<=\\w)([A-Z])~', '_$1', $shortClassName);
 
-            if ($servicePostFix === null) {
-                throw new LogicException('Service post fix must not be null');
-            }
+                if ($servicePostFix === null) {
+                    throw new LogicException('Service post fix must not be null');
+                }
 
-            $definitionName = sprintf('jphooiveld_eventsauce.aggregate_repository.%s', strtolower($servicePostFix));
+                $serviceId = sprintf('jphooiveld_eventsauce.aggregate_repository.%s', strtolower($servicePostFix));
 
-            if ($container->hasDefinition($definitionName)) {
+                if ($container->hasDefinition($serviceId)) {
+                    continue;
+                }
+
+                if (is_a($className, AggregateRootWithSnapshotting::class, true)) {
+                    if (!$snapshotEnabled) {
+                        throw new LogicException('Snapshotting is not enabled.');
+                    }
+
+                    $this->createAggregateRootWithSnapshottingService($container, $serviceId, $className);
+                    continue;
+                }
+
+                $this->createAggregateRootService($container, $serviceId, $className);
                 continue;
             }
 
-            $arguments = [
-                $className,
-                new Reference('jphooiveld_eventsauce.message_repository'),
-                new Reference('jphooiveld_eventsauce.message_dispatcher'),
-                new Reference('jphooiveld_eventsauce.message_decorator'),
-            ];
-
-            $definition = new Definition(ConstructingAggregateRootRepository::class, $arguments);
-            $container->setDefinition($definitionName, $definition);
+            throw new LogicException(sprintf('Provided class must implement %s', AggregateRoot::class));
         }
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param string $serviceId
+     * @param string $className
+     */
+    private function createAggregateRootWithSnapshottingService(ContainerBuilder $container, string $serviceId, string $className): void
+    {
+        $innerServiceId = sprintf('%s.inner', $serviceId);
+
+        $this->createAggregateRootService($container, $innerServiceId, $className);
+
+        $arguments = [
+            $className,
+            new Reference('jphooiveld_eventsauce.message_repository'),
+            new Reference('jphooiveld_eventsauce.snapshot_repository'),
+            new Reference($innerServiceId),
+        ];
+
+        $definition = new Definition(ConstructingAggregateRootRepositoryWithSnapshotting::class, $arguments);
+        $container->setDefinition($serviceId, $definition);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param string $serviceId
+     * @param string $className
+     */
+    private function createAggregateRootService(ContainerBuilder $container, string $serviceId, string $className): void
+    {
+        $arguments = [
+            $className,
+            new Reference('jphooiveld_eventsauce.message_repository'),
+            new Reference('jphooiveld_eventsauce.message_dispatcher'),
+            new Reference('jphooiveld_eventsauce.message_decorator'),
+        ];
+
+        $definition = new Definition(ConstructingAggregateRootRepository::class, $arguments);
+        $container->setDefinition($serviceId, $definition);
     }
 }

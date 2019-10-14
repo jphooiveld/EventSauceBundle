@@ -2,7 +2,6 @@
 
 namespace Jphooiveld\Bundle\EventSauceBundle\Tests\DependencyInjection;
 
-use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\Consumer;
 use Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\JphooiveldEventSauceExtension;
 use PHPUnit\Framework\TestCase;

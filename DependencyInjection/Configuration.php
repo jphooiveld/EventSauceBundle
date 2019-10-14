@@ -67,17 +67,32 @@ final class Configuration implements ConfigurationInterface
                             ->end()
                         ->end()
                         ->arrayNode('aggregates')
-                            ->info('Autoconfigure provided aggregate roots.')
+                            ->info('Configure repositories for provided aggregate roots.')
                             ->scalarPrototype()
-                            ->validate()
-                                ->ifTrue(function ($value) {
-                                    return !is_a($value, AggregateRoot::class, true);
-                                })
-                                ->thenInvalid('Class %s must be valid class and implement interface EventSauce\EventSourcing\AggregateRoot')
+                                ->validate()
+                                    ->ifTrue(static function ($value) {
+                                        return !is_a($value, AggregateRoot::class, true);
+                                    })
+                                    ->thenInvalid('Class %s must be valid class and implement interface EventSauce\EventSourcing\AggregateRoot')
+                                ->end()
+                            ->end()
                         ->end()
                     ->end()
                 ->end()
-            ->end()
+                 ->arrayNode('snapshot_repository')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('enabled')
+                            ->info('Enables snapshotting. Aggregates that implement snapshotting will be configured.')
+                            ->defaultValue(false)
+                        ->end()
+                        ->scalarNode('service')
+                            ->info('The service to use for the snapshot repository')
+                            ->defaultNull()
+                        ->end()
+                    ->end()
+                ->end()
+           ->end()
         ;
         //@formatter:on
 

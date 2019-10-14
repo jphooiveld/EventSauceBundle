@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Jphooiveld\Bundle\EventSauceBundle\DependencyInjection;
 
-use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\Consumer;
 use EventSauce\EventSourcing\MessageDecorator;
 use EventSauce\EventSourcing\Upcasting\DelegatableUpcaster;
@@ -31,7 +30,7 @@ final class JphooiveldEventSauceExtension extends Extension
         $loader->load('dispatcher.xml');
         $loader->load('headers.xml');
         $loader->load('inflector.xml');
-        $loader->load('repository.xml');
+        $loader->load('aggregate_repository.xml');
         $loader->load('serializer.xml');
         $loader->load('upcasting.xml');
 
@@ -69,6 +68,16 @@ final class JphooiveldEventSauceExtension extends Extension
             }
         }
 
+        if ($config['snapshot_repository']['enabled'] === true) {
+            if ($config['snapshot_repository']['service'] === null) {
+                throw new LogicException('You must set a valid snapshot service when snapshotting is enabled.');
+            }
+
+            $loader->load('snapshot_repository.xml');
+            $container->setAlias('jphooiveld_eventsauce.snapshot_repository', $config['snapshot_repository']['service']);
+        }
+
+        $container->setParameter('jphooiveld_eventsauce.snapshot_repository.enabled', $config['snapshot_repository']['enabled']);
         $container->setParameter('jphooiveld_eventsauce.message_repository.aggregates', $config['message_repository']['aggregates']);
         $container->setParameter('jphooiveld_eventsauce.time_of_recording.timezone', $config['time_of_recording']['timezone']);
         $container->registerForAutoconfiguration(MessageDecorator::class)->addTag('eventsauce.message_decorator');

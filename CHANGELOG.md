@@ -1,3 +1,6 @@
+1.2
+- Add snapshotting configuration.
+
 1.1
 - Breaking changes in service configuration because of changes to serialization in EventSaucse 0.6.0 (https://eventsauce.io/docs/upgrading/to-0-6-0).
 - Breaking changes in database schema because of storing aggregate version in EventSaucse 0.7.0 (https://eventsauce.io/docs/upgrading/to-0-7-0)

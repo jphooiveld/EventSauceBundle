@@ -62,6 +62,11 @@ jphooiveld_event_sauce:
         # Configure provided aggregate roots to use the default repository implementations as created by the bundle 
         aggregates:
             - App\Domain\Order
+    snapshot_repository:
+        # User snapshotting
+        enabled: false
+        # Service must point to a valid class that implements EventSauce\EventSourcing\Snapshotting\SnapshotRepository
+        service: 'App\Infrastructure\MySnapshotRepository'
             
 ```
 
@@ -134,7 +139,12 @@ class AddOrderHandler
 }
 ```
 
-If you don't want to autoconfigure your repository then don't add it to the list and configue it yoursekf.
+If you don't want to configure your repository then don't add it to the list and configue it yourself.
+
+When snapshotting is enabled and the snapshotting service points to a valid instance of 
+**EventSauce\EventSourcing\Snapshotting\SnapshotRepository** every provided aggregate (under aggregates in message_repository configuration) 
+that implements  **EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting** will automatically configure the
+message repository as well as the snapshot repository.
 
 ## Auto configuration
 
