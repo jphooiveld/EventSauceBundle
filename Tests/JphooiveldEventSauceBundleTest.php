@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Jphooiveld\Bundle\EventSauceBundle\Tests;
 
@@ -10,7 +11,12 @@ use Jphooiveld\Bundle\EventSauceBundle\JphooiveldEventSauceBundle;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class JphooiveldEventSauceBundleTest extends TestCase
+/**
+ * Class JphooiveldEventSauceBundleTest
+ * @package Jphooiveld\Bundle\EventSauceBundle\Tests
+ * @covers \Jphooiveld\Bundle\EventSauceBundle\JphooiveldEventSauceBundle
+ */
+final class JphooiveldEventSauceBundleTest extends TestCase
 {
     public function testCompilerPasses()
     {

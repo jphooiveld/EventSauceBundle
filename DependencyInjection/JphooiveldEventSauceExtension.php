@@ -45,7 +45,6 @@ final class JphooiveldEventSauceExtension extends Extension
 
             $definition = $container->getDefinition('jphooiveld_eventsauce.message_dispatcher.messenger');
             $definition->setArgument(0, new Reference($config['messenger']['service_bus']));
-
         } else {
             $container->registerForAutoconfiguration(Consumer::class)->addTag('eventsauce.consumer');
         }

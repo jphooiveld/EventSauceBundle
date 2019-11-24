@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Jphooiveld\Bundle\EventSauceBundle\Tests\Command;
 
@@ -10,7 +11,12 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
-class CreateSchemaCommandTest extends KernelTestCase
+/**
+ * Class CreateSchemaCommandTest
+ * @package Jphooiveld\Bundle\EventSauceBundle\Tests\Command
+ * @covers \Jphooiveld\Bundle\EventSauceBundle\Command\CreateSchemaCommand
+ */
+final class CreateSchemaCommandTest extends KernelTestCase
 {
     /**
      * @throws DBALException
