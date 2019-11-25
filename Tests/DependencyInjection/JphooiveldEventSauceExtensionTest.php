@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Jphooiveld\Bundle\EventSauceBundle\Tests\DependencyInjection;
 
@@ -8,7 +9,13 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Parser;
 
-class JphooiveldEventSauceExtensionTest extends TestCase
+/**
+ * Class JphooiveldEventSauceExtensionTest
+ * @package Jphooiveld\Bundle\EventSauceBundle\Tests\DependencyInjection
+ * @covers \Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\JphooiveldEventSauceExtension
+ * @covers \Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\Configuration
+ */
+final class JphooiveldEventSauceExtensionTest extends TestCase
 {
     /**
      * @throws \Exception
@@ -120,7 +127,7 @@ class JphooiveldEventSauceExtensionTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testRepositoryWitDoctrine()
+    public function testRepositoryWithDoctrine()
     {
         $configuration = new ContainerBuilder();
         $loader        = new JphooiveldEventSauceExtension();

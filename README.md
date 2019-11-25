@@ -1,5 +1,5 @@
 # JphooiveldEventSauceBundle
-
+[![Build Status](https://travis-ci.com/jphooiveld/EventSauceBundle.svg?branch=master)](https://travis-ci.com/jphooiveld/EventSauceBundle)
 ## Info
 
 This bundle integrates EventSauce and it's doctrine message repository into your symfony application.

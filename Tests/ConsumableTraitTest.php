@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Jphooiveld\Bundle\EventSauceBundle\Tests;
 
@@ -8,7 +9,12 @@ use Jphooiveld\Bundle\EventSauceBundle\Tests\Consumer\TodoCreated;
 use Jphooiveld\Bundle\EventSauceBundle\Tests\Consumer\TodoStorage;
 use PHPUnit\Framework\TestCase;
 
-class ConsumableTraitTest extends TestCase
+/**
+ * Class ConsumableTraitTest
+ * @package Jphooiveld\Bundle\EventSauceBundle\Tests
+ * @covers \Jphooiveld\Bundle\EventSauceBundle\ConsumableTrait
+ */
+final class ConsumableTraitTest extends TestCase
 {
     public function testHandle()
     {

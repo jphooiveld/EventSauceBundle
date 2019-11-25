@@ -50,7 +50,7 @@ final class CreateSchemaCommand extends Command
     protected function configure()
     {
         $this->setDefinition([
-           new InputOption('force', null, InputOption::VALUE_NONE)
+            new InputOption('force', null, InputOption::VALUE_NONE),
         ]);
     }
 
@@ -62,11 +62,11 @@ final class CreateSchemaCommand extends Command
     {
         if (!$input->getOption('force')) {
             $output->writeln('You must use the --force option to execute this command.');
-            return null;
+            return -1;
         }
 
         $schema = new Schema();
-        $table = $schema->createTable($this->bag->get('jphooiveld_eventsauce.repository.doctrine.table'));
+        $table  = $schema->createTable($this->bag->get('jphooiveld_eventsauce.repository.doctrine.table'));
         $table->addColumn('event_id', 'guid');
         $table->addColumn('event_type', 'string', ['length' => 255]);
         $table->addColumn('aggregate_root_id', 'guid');
@@ -88,6 +88,6 @@ final class CreateSchemaCommand extends Command
 
         $output->writeln(sprintf('Table %s created', $this->bag->get('jphooiveld_eventsauce.repository.doctrine.table')));
 
-        return null;
+        return -1;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Jphooiveld\Bundle\EventSauceBundle\Tests;
 
@@ -9,7 +10,12 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-class MessengerDispatcherTest extends TestCase
+/**
+ * Class MessengerDispatcherTest
+ * @package Jphooiveld\Bundle\EventSauceBundle\Tests
+ * @covers \Jphooiveld\Bundle\EventSauceBundle\MessengerDispatcher
+ */
+final class MessengerDispatcherTest extends TestCase
 {
     public function testDispatch()
     {

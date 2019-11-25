@@ -62,9 +62,9 @@ final class AggregateRepositoryCompilerPass implements CompilerPassInterface
     /**
      * @param ContainerBuilder $container
      * @param string $serviceId
-     * @param string $className
+     * @param AggregateRootWithSnapshotting|string $className
      */
-    private function createAggregateRootWithSnapshottingService(ContainerBuilder $container, string $serviceId, string $className): void
+    private function createAggregateRootWithSnapshottingService(ContainerBuilder $container, string $serviceId, $className): void
     {
         $innerServiceId = sprintf('%s.inner', $serviceId);
 
@@ -84,9 +84,9 @@ final class AggregateRepositoryCompilerPass implements CompilerPassInterface
     /**
      * @param ContainerBuilder $container
      * @param string $serviceId
-     * @param string $className
+     * @param AggregateRoot|string $className
      */
-    private function createAggregateRootService(ContainerBuilder $container, string $serviceId, string $className): void
+    private function createAggregateRootService(ContainerBuilder $container, string $serviceId, $className): void
     {
         $arguments = [
             $className,
