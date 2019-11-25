@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace Jphooiveld\Bundle\EventSauceBundle\Tests\Consumer;
 
 use EventSauce\EventSourcing\Consumer;
 use Jphooiveld\Bundle\EventSauceBundle\ConsumableTrait;
 
-class NotifyCreated implements Consumer
+final class NotifyCreated implements Consumer
 {
     use ConsumableTrait;
 

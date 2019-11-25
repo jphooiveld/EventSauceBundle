@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace Jphooiveld\Bundle\EventSauceBundle\Tests\Consumer;
 
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
-class TodoCreated implements SerializablePayload
+final class TodoCreated implements SerializablePayload
 {
     /**
      * @var int ID

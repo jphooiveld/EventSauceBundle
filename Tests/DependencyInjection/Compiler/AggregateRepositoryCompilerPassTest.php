@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Jphooiveld\Bundle\EventSauceBundle\Tests\DependencyInjection\Compiler;
 
@@ -10,7 +11,14 @@ use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class AggregateRepositoryCompilerPassTest extends TestCase
+/**
+ * Class AggregateRepositoryCompilerPassTest
+ * @package Jphooiveld\Bundle\EventSauceBundle\Tests\DependencyInjection\Compiler
+ * @covers \Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\Compiler\AggregateRepositoryCompilerPass
+ * @covers \Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\Configuration
+ * @covers \Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\JphooiveldEventSauceExtension
+ */
+final class AggregateRepositoryCompilerPassTest extends TestCase
 {
     /**
      * @throws ReflectionException
