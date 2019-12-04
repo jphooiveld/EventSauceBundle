@@ -38,7 +38,15 @@ matrix:
           env: COVERAGE=true PHPUNIT_FLAGS="-v --coverage-text"
 
         - stage: "PHP 7.4"
-          php: 7.4snapshot
+          php: 7.4
+        - php: 7.4snapshot
+        - php: 7.4
+          env: COMPOSER_FLAGS="--prefer-stable" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
+        - php: 7.4
+          env: DEPENDENCIES="symfony/lts:^4" STABILITY="dev"
+        - php: 7.4
+          env: COVERAGE=true PHPUNIT_FLAGS="-v --coverage-text"
+
         - stage: "PHP 8.0"
           php: master
 
