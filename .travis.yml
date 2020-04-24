@@ -67,7 +67,7 @@ install:
     - if [ -n "$GH_AUTHTOKEN" ]; then composer config github-oauth.github.com ${GH_AUTHTOKEN}; fi;
     - if [[ "$COMPOSER_FLAGS" == *"--prefer-lowest"* ]]; then composer update --prefer-dist --no-interaction --prefer-stable --quiet; fi
     - if ! [ -z "$STABILITY" ]; then composer config minimum-stability ${STABILITY}; fi;
-    - $HOME/phive --no-progress install phpunit --trust-gpg-keys 0x8E730BA25823D8B5
+    - $HOME/phive --no-progress install https://phar.phpunit.de/phpunit-8.5.4.phar --trust-gpg-keys 0x4AA394086372C20A
     - composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction
 
 script:
