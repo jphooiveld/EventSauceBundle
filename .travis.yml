@@ -66,7 +66,7 @@ install:
     - if [ -n "$GH_AUTHTOKEN" ]; then composer config github-oauth.github.com ${GH_AUTHTOKEN}; fi;
     - if [[ "$COMPOSER_FLAGS" == *"--prefer-lowest"* ]]; then composer update --prefer-dist --no-interaction --prefer-stable --quiet; fi
     - if ! [ -z "$STABILITY" ]; then composer config minimum-stability ${STABILITY}; fi;
-    - $HOME/phive install phpunit --trust-gpg-keys 4AA394086372C20A
+    - $HOME/phive install --trust-gpg-keys 4AA394086372C20A
     - composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction
 
 script:
