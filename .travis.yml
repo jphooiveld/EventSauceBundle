@@ -69,6 +69,8 @@ install:
     - if ! [ -z "$STABILITY" ]; then composer config minimum-stability ${STABILITY}; fi;
     - $HOME/phive --no-progress install https://phar.phpunit.de/phpunit-8.5.4.phar --trust-gpg-keys 0x4AA394086372C20A
     - composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction
+    - ./vendor/bin/simple-phpunit install
 
 script:
-    - ./vendor/bin/simple-phpunit ${PHPUNIT_FLAGS}
+    - composer validate --strict --no-check-lock
+    - ./vendor/bin/simple-phpunit $PHPUNIT_FLAGS
