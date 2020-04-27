@@ -50,14 +50,6 @@ matrix:
           php: master
 
 before_install:
-    - wget -O phive.phar "https://phar.io/releases/phive.phar"
-    - wget -O phive.phar.asc "https://phar.io/releases/phive.phar.asc"
-    - gpg --keyserver hkps.pool.sks-keyservers.net --recv-keys 0x9D8A98B29B2D5D79
-    - gpg --verify phive.phar.asc phive.phar
-    - rm phive.phar.asc
-    - chmod +x phive.phar
-    - mv phive.phar "$HOME/phive"
-
     - if [[ $COVERAGE != true ]]; then phpenv config-rm xdebug.ini || true; fi
     - if ! [ -z "$STABILITY" ]; then composer config minimum-stability ${STABILITY}; fi;
     - if ! [ -v "$DEPENDENCIES" ]; then composer require --no-update ${DEPENDENCIES}; fi;
@@ -66,7 +58,6 @@ install:
     - if [ -n "$GH_AUTHTOKEN" ]; then composer config github-oauth.github.com ${GH_AUTHTOKEN}; fi;
     - if [[ "$COMPOSER_FLAGS" == *"--prefer-lowest"* ]]; then composer update --prefer-dist --no-interaction --prefer-stable --quiet; fi
     - if ! [ -z "$STABILITY" ]; then composer config minimum-stability ${STABILITY}; fi;
-    - $HOME/phive --no-progress install https://phar.phpunit.de/phpunit-8.5.4.phar --trust-gpg-keys 0x4AA394086372C20A
     - composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction
     - ./vendor/bin/simple-phpunit install
 
