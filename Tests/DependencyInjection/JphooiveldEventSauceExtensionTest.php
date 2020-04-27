@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Jphooiveld\Bundle\EventSauceBundle\Tests\DependencyInjection;
 
 use EventSauce\EventSourcing\Consumer;
+use Exception;
 use Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\JphooiveldEventSauceExtension;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -18,7 +19,7 @@ use Symfony\Component\Yaml\Parser;
 final class JphooiveldEventSauceExtensionTest extends TestCase
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testDefaultAliasses()
     {
@@ -39,7 +40,7 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testTimezone()
     {
@@ -54,7 +55,7 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testDispatcherSynchronous()
     {
@@ -76,7 +77,7 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testDispatcherMessenger()
     {
@@ -106,7 +107,7 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testRepositoryWithoutDoctrine()
     {
@@ -125,7 +126,7 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testRepositoryWithDoctrine()
     {
