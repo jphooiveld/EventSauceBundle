@@ -71,4 +71,4 @@ install:
     - composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction
 
 script:
-    - ./tools/phpunit
+    - ./tools/phpunit ${PHPUNIT_FLAGS}
