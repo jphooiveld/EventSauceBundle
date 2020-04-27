@@ -21,8 +21,8 @@
     ],
     "require": {
         "php": "^7.2.5|^8.0",
-        "eventsauce/eventsauce": "^0.7.0",
-        "eventsauce/doctrine-message-repository": "^0.7.0",
+        "eventsauce/eventsauce": "^0.8",
+        "eventsauce/doctrine-message-repository": "^0.8",
         "symfony/console": "^4.2|^5.0",
         "symfony/messenger": "^4.2|^5.0",
         "symfony/config": "^4.2|^5.0",
