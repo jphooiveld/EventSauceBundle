@@ -24,11 +24,11 @@ matrix:
     fast_finish: true
     include:
         - php: 7.2
-          env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
+          env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="max[self]=0"
         - php: 7.3
-          env: COMPOSER_FLAGS="--prefer-stable" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
+          env: COMPOSER_FLAGS="--prefer-stable" SYMFONY_DEPRECATIONS_HELPER="max[self]=0"
         - php: 7.4
-          env: COMPOSER_FLAGS="--prefer-stable" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
+          env: COMPOSER_FLAGS="--prefer-stable" SYMFONY_DEPRECATIONS_HELPER="max[self]=0"
 
         - php: 7.2
         - php: 7.3
