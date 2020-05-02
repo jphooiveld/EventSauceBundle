@@ -47,7 +47,7 @@ final class CreateSchemaCommand extends Command
     /**
      * {@inheritDoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDefinition([
             new InputOption('force', null, InputOption::VALUE_NONE),

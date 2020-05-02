@@ -32,7 +32,14 @@
     "require-dev": {
         "doctrine/dbal": "^2.6.0",
         "roave/security-advisories": "dev-master",
-        "symfony/framework-bundle": "^4.2|^5.0"
+        "symfony/framework-bundle": "^4.2|^5.0",
+        "symfony/phpunit-bridge": "^5.0",
+        "phpstan/phpstan-phpunit": "^0.12.8",
+        "phpstan/phpstan-symfony": "^0.12.6",
+        "phpstan/phpstan-deprecation-rules": "^0.12.2",
+        "phpstan/extension-installer": "^1.0",
+        "phpstan/phpstan": "^0.12.19",
+        "friendsofphp/php-cs-fixer": "^2.16"
     },
     "suggest": {
         "symfony/console": "Using symfony console to create event sourcing table",

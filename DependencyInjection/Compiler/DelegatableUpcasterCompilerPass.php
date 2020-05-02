@@ -13,7 +13,7 @@ final class DelegatableUpcasterCompilerPass implements CompilerPassInterface
     /**
      * {@inheritDoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->hasDefinition('jphooiveld_eventsauce.upcaster.delegating')) {
             return;

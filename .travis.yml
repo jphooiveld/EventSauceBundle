@@ -5,11 +5,15 @@ language: php
 
 cache:
     directories:
-        - "$HOME/.phive"
-        - "$HOME/.phive/phars"
-        - "$HOME/.cache/composer"
-        - "$HOME/.composer/cache"
-        - "$HOME/.gnupg"
+        - $HOME/.cache/composer
+        - $HOME/.composer/cache
+        - $HOME/.composer/cache/files
+        - $HOME/symfony-bridge/.phpunit
+
+env:
+    global:
+        - PHPUNIT_FLAGS="-v"
+        - SYMFONY_PHPUNIT_DIR="$HOME/symfony-bridge/.phpunit"
 
 matrix:
     allow_failures:
@@ -19,46 +23,33 @@ matrix:
         - php: master
     fast_finish: true
     include:
-        - stage: "PHP 7.2"
-          php: 7.2
+        - php: 7.2
+          env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="max[self]=0"
+        - php: 7.3
+          env: COMPOSER_FLAGS="--prefer-stable" SYMFONY_DEPRECATIONS_HELPER="max[self]=0"
+        - php: 7.4
+          env: COMPOSER_FLAGS="--prefer-stable" SYMFONY_DEPRECATIONS_HELPER="max[self]=0"
+
+        - php: 7.2
+        - php: 7.3
+          env: COVERAGE=true PHPUNIT_FLAGS="-v --coverage-text"
+        - php: 7.4
+
+        - php: 7.2
+          env: DEPENDENCIES="symfony/lts:^4" STABILITY="dev"
+        - php: 7.3
+          env: DEPENDENCIES="symfony/lts:^4" STABILITY="dev"
+        - php: 7.4
+          env: DEPENDENCIES="symfony/lts:^4" STABILITY="dev"
+
         - php: 7.2snapshot
-        - php: 7.2
-          env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
-        - php: 7.2
-          env: DEPENDENCIES="symfony/lts:^4" STABILITY="dev"
-
-        - stage: "PHP 7.3"
-          php: 7.3
         - php: 7.3snapshot
-        - php: 7.3
-          env: COMPOSER_FLAGS="--prefer-stable" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
-        - php: 7.3
-          env: DEPENDENCIES="symfony/lts:^4" STABILITY="dev"
-        - php: 7.3
-          env: COVERAGE=true PHPUNIT_FLAGS="-v --coverage-text"
-
-        - stage: "PHP 7.4"
-          php: 7.4
         - php: 7.4snapshot
-        - php: 7.4
-          env: COMPOSER_FLAGS="--prefer-stable" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
-        - php: 7.4
-          env: DEPENDENCIES="symfony/lts:^4" STABILITY="dev"
-        - php: 7.4
-          env: COVERAGE=true PHPUNIT_FLAGS="-v --coverage-text"
 
         - stage: "PHP 8.0"
           php: master
 
 before_install:
-    - wget -O phive.phar "https://phar.io/releases/phive.phar"
-    - wget -O phive.phar.asc "https://phar.io/releases/phive.phar.asc"
-    - gpg --keyserver hkps.pool.sks-keyservers.net --recv-keys 0x9D8A98B29B2D5D79
-    - gpg --verify phive.phar.asc phive.phar
-    - rm phive.phar.asc
-    - chmod +x phive.phar
-    - mv phive.phar "$HOME/phive"
-
     - if [[ $COVERAGE != true ]]; then phpenv config-rm xdebug.ini || true; fi
     - if ! [ -z "$STABILITY" ]; then composer config minimum-stability ${STABILITY}; fi;
     - if ! [ -v "$DEPENDENCIES" ]; then composer require --no-update ${DEPENDENCIES}; fi;
@@ -67,8 +58,9 @@ install:
     - if [ -n "$GH_AUTHTOKEN" ]; then composer config github-oauth.github.com ${GH_AUTHTOKEN}; fi;
     - if [[ "$COMPOSER_FLAGS" == *"--prefer-lowest"* ]]; then composer update --prefer-dist --no-interaction --prefer-stable --quiet; fi
     - if ! [ -z "$STABILITY" ]; then composer config minimum-stability ${STABILITY}; fi;
-    - $HOME/phive --no-progress install https://phar.phpunit.de/phpunit-8.5.4.phar --trust-gpg-keys 0x4AA394086372C20A
     - composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction
+    - ./vendor/bin/simple-phpunit install
 
 script:
-    - ./tools/phpunit
+    - composer validate --strict --no-check-lock
+    - ./vendor/bin/simple-phpunit $PHPUNIT_FLAGS

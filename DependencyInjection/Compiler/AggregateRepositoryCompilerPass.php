@@ -22,7 +22,7 @@ final class AggregateRepositoryCompilerPass implements CompilerPassInterface
      * {@inheritDoc}
      * @throws ReflectionException
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $snapshotEnabled = $container->getParameter('jphooiveld_eventsauce.snapshot_repository.enabled');
 
