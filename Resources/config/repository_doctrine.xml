@@ -8,6 +8,7 @@
             <argument/>
             <argument type="service" id="jphooiveld_eventsauce.message_serializer"/>
             <argument>%jphooiveld_eventsauce.repository.doctrine.table%</argument>
+            <argument>%jphooiveld_eventsauce.repository.doctrine.json_options%</argument>
         </service>
     </services>
 </container>

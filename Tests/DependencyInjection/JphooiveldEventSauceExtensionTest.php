@@ -7,8 +7,10 @@ use EventSauce\EventSourcing\Consumer;
 use Exception;
 use Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\JphooiveldEventSauceExtension;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class JphooiveldEventSauceExtensionTest
@@ -142,6 +144,20 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
         $this->assertEquals('jphooiveld_eventsauce.message_repository.doctrine', (string)$configuration->getAlias('jphooiveld_eventsauce.message_repository'));
         $this->assertTrue($configuration->hasDefinition('jphooiveld_eventsauce.command.create_schema'));
         $this->assertEquals('bar', $configuration->getParameter('jphooiveld_eventsauce.repository.doctrine.table'));
+        $this->assertEquals(JSON_PRETTY_PRINT | JSON_PRESERVE_ZERO_FRACTION, $configuration->getParameter('jphooiveld_eventsauce.repository.doctrine.json_options'));
+    }
+
+    public function testInvalidJsonOptions()
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        $configuration = new ContainerBuilder();
+        $loader        = new JphooiveldEventSauceExtension();
+        $config        = $this->getDefaultConfig();
+
+        $config['message_repository']['doctrine']['json_options'][] = 3;
+
+        $loader->load([$config], $configuration);
     }
 
     private function getDefaultConfig()
@@ -158,10 +174,13 @@ message_repository:
         enabled: true
         connection: doctrine.dbal.default_connection
         table: event
+        json_options:
+            - !php/const JSON_PRETTY_PRINT
+            - !php/const JSON_PRESERVE_ZERO_FRACTION
     aggregates:
         - 'Jphooiveld\Bundle\EventSauceBundle\Tests\Aggregate\Order'
 EOF;
 
-        return (new Parser())->parse($yaml);
+        return (new Parser())->parse($yaml, Yaml::PARSE_CONSTANT);
     }
 }

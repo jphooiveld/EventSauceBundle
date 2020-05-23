@@ -15,6 +15,18 @@ final class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
+        $validJsonConstants = [
+            JSON_FORCE_OBJECT, JSON_HEX_QUOT, JSON_HEX_TAG, JSON_HEX_AMP, JSON_HEX_APOS,
+            JSON_INVALID_UTF8_IGNORE, JSON_INVALID_UTF8_SUBSTITUTE, JSON_NUMERIC_CHECK,
+            JSON_PARTIAL_OUTPUT_ON_ERROR, JSON_PRESERVE_ZERO_FRACTION, JSON_PRETTY_PRINT,
+            JSON_UNESCAPED_LINE_TERMINATORS, JSON_UNESCAPED_SLASHES, JSON_UNESCAPED_UNICODE
+        ];
+
+        if (PHP_VERSION_ID >= 70300) {
+            /** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
+            $validJsonConstants[] = JSON_THROW_ON_ERROR;
+        }
+
         $treeBuilder = new TreeBuilder('jphooiveld_eventsauce');
 
         //@formatter:off
@@ -51,6 +63,7 @@ final class Configuration implements ConfigurationInterface
                         ->end()
                         ->arrayNode('doctrine')
                             ->addDefaultsIfNotSet()
+                            ->fixXmlConfig('json_option')
                             ->children()
                                 ->booleanNode('enabled')
                                     ->info('Use doctrine as default message repository. If you turn this off you must provide your own service.')
@@ -63,6 +76,14 @@ final class Configuration implements ConfigurationInterface
                                 ->scalarNode('table')
                                     ->info('The table name in the database to store the messages.')
                                     ->defaultValue('event')
+                                ->end()
+                                ->arrayNode('json_options')
+                                    ->scalarPrototype()
+                                        ->validate()
+                                            ->ifNotInArray($validJsonConstants)
+                                            ->thenInvalid('Invalid JSON constant')
+                                        ->end()
+                                    ->end()
                                 ->end()
                             ->end()
                         ->end()

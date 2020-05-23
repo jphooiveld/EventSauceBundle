@@ -52,10 +52,13 @@ final class JphooiveldEventSauceExtension extends Extension
         $container->setAlias('jphooiveld_eventsauce.message_repository', $config['message_repository']['service']);
 
         if ($config['message_repository']['doctrine']['enabled'] === true) {
+            $jsonOptions = array_reduce($config['message_repository']['doctrine']['json_options'], static function($a, $b) { return $a | $b; }, 0);
+
             $loader->load('repository_doctrine.xml');
 
             $container->setAlias('jphooiveld_eventsauce.message_repository', 'jphooiveld_eventsauce.message_repository.doctrine');
             $container->setParameter('jphooiveld_eventsauce.repository.doctrine.table', $config['message_repository']['doctrine']['table']);
+            $container->setParameter('jphooiveld_eventsauce.repository.doctrine.json_options', $jsonOptions);
 
             $definition = $container->getDefinition('jphooiveld_eventsauce.message_repository.doctrine');
             $definition->setArgument(0, new Reference($config['message_repository']['doctrine']['connection']));
