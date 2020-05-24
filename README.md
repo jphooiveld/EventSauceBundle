@@ -59,6 +59,10 @@ jphooiveld_event_sauce:
             connection: doctrine.dbal.default_connection
             # The table name in the database to store the messages.
             table: event
+            # JSON options for the doctrine message repository
+            json_options:
+                - !php/const JSON_PRETTY_PRINT
+                - !php/const JSON_PRESERVE_ZERO_FRACTION
         # Configure provided aggregate roots to use the default repository implementations as created by the bundle 
         aggregates:
             - App\Domain\Order
