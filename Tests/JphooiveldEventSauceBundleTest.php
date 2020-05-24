@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 final class JphooiveldEventSauceBundleTest extends TestCase
 {
-    public function testCompilerPasses()
+    public function testCompilerPasses(): void
     {
         $container = new ContainerBuilder();
         $bundle    = new JphooiveldEventSauceBundle();
@@ -31,7 +31,7 @@ final class JphooiveldEventSauceBundleTest extends TestCase
         $this->assertContainsCompilerPass($passes, AggregateRepositoryCompilerPass::class);
     }
 
-    private function assertContainsCompilerPass(array $passes, string $class)
+    private function assertContainsCompilerPass(array $passes, string $class): void
     {
         $found = false;
 
@@ -42,6 +42,6 @@ final class JphooiveldEventSauceBundleTest extends TestCase
             }
         }
 
-        $this->assertTrue($found, sprintf('No compiler pass %s found in bundle', $class));
+        self::assertTrue($found, sprintf('No compiler pass %s found in bundle', $class));
     }
 }

@@ -21,7 +21,7 @@ final class CreateSchemaCommandTest extends KernelTestCase
     /**
      * @throws DBALException
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         if (!extension_loaded('pdo_sqlite')) {
             $this->markTestSkipped('Can only test under pdo_sqlite driver');
@@ -37,9 +37,9 @@ final class CreateSchemaCommandTest extends KernelTestCase
 
         $tester->execute(['--force' => true]);
 
-        $this->assertEquals('Table event created' . PHP_EOL, $tester->getDisplay());
+        self::assertSame('Table event created' . PHP_EOL, $tester->getDisplay());
 
         $tester->execute([]);
-        $this->assertEquals('You must use the --force option to execute this command.' . PHP_EOL, $tester->getDisplay());
+        self::assertSame('You must use the --force option to execute this command.' . PHP_EOL, $tester->getDisplay());
     }
 }

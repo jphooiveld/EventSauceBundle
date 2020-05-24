@@ -14,6 +14,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Console\Application;
 
 final class JphooiveldEventSauceExtension extends Extension
 {
@@ -35,7 +37,7 @@ final class JphooiveldEventSauceExtension extends Extension
         $loader->load('upcasting.xml');
 
         if ($config['messenger']['enabled'] === true) {
-            if (!interface_exists('Symfony\Component\Messenger\MessageBusInterface')) {
+            if (!interface_exists(MessageBusInterface::class)) {
                 throw new LogicException('Symfony messenger dispatcher cannot be enabled as the component is not installed. Try running "composer require symfony/messenger".');
             }
 
@@ -63,7 +65,7 @@ final class JphooiveldEventSauceExtension extends Extension
             $definition = $container->getDefinition('jphooiveld_eventsauce.message_repository.doctrine');
             $definition->setArgument(0, new Reference($config['message_repository']['doctrine']['connection']));
 
-            if (class_exists('Symfony\Component\Console\Application')) {
+            if (class_exists(Application::class)) {
                 $loader->load('repository_doctrine_command.xml');
                 $definition = $container->getDefinition('jphooiveld_eventsauce.command.create_schema');
                 $definition->setArgument(1, new Reference($config['message_repository']['doctrine']['connection']));

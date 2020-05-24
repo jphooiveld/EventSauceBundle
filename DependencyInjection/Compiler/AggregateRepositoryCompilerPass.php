@@ -26,6 +26,7 @@ final class AggregateRepositoryCompilerPass implements CompilerPassInterface
     {
         $snapshotEnabled = $container->getParameter('jphooiveld_eventsauce.snapshot_repository.enabled');
 
+        /** @var class-string<\EventSauce\EventSourcing\AggregateRoot> $className */
         foreach ($container->getParameter('jphooiveld_eventsauce.message_repository.aggregates') as $className) {
             if (is_a($className, AggregateRoot::class, true)) {
                 $reflectionClass = new ReflectionClass($className);

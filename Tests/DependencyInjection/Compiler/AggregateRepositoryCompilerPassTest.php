@@ -35,6 +35,6 @@ final class AggregateRepositoryCompilerPassTest extends TestCase
         $compiler = new AggregateRepositoryCompilerPass();
         $compiler->process($configuration);
 
-        $this->assertTrue($configuration->hasDefinition('jphooiveld_eventsauce.aggregate_repository.order'));
+        self::assertTrue($configuration->hasDefinition('jphooiveld_eventsauce.aggregate_repository.order'));
     }
 }

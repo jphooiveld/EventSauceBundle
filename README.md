@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.com/jphooiveld/EventSauceBundle.svg?branch=master)](https://travis-ci.com/jphooiveld/EventSauceBundle)
 ## Info
 
-This bundle integrates EventSauce and it's doctrine message repository into your symfony application.
+This bundle integrates EventSauce, and it's doctrine message repository into your symfony application.
 
 It's strongly advised to know how EventSauce works or read up on the offical website (https://eventsauce.io) 
 before you install this bundle.
@@ -25,7 +25,7 @@ composer package **symfony/console**.
     $ composer require symfony/console
 
 Normally symfony should be able to register the bundle automatically. If not you will need to add it 
-to the bundles.php in your config directory
+to the bundles.php in your config directory.
 
 ```php
 <?php
@@ -78,18 +78,18 @@ jphooiveld_event_sauce:
 
 ### Messenger
 
-By default the synchronous message dispatcher from EventSauce is used. If you enable symfony messenger and 
+By default, the synchronous message dispatcher from EventSauce is used. If you enable symfony messenger and 
 provide the service id of the event bus all messages will be handled by the messenger component. 
 
 ### Message repository
 
-The doctrine message component is automatically installed as dependency. Otherwise there would be a non
+The doctrine message component will automatically be installed as a dependency, otherwise there would be a non
 functioning application. But if you want to install another type of repository or create your own it's 
 easy to reference it in the service parameter. If doctrine is enabled (and it's by default) this will be
 ignored.
 
-Configuring aggregates is an easy way to bind your aggregates to a the doctrine message repository with
-default EventSauce services. A compiler pass creates the services automatically internally so you can bind 
+Configuring aggregates is an easy way to bind your aggregates to the message repository with
+default EventSauce services. A compiler pass creates the services automatically internally, so you can bind 
 them to parameters in your services.yaml.
 
 Let's for example assume you have an aggregate root called Order
@@ -109,7 +109,7 @@ class Order implements AggregateRoot
 
 If you add 'App\Domain\Order' to the list of aggregates in the configuration the compiler pass will 
 automatically create a service called **jphooiveld_eventsauce.aggregate_repository.order**.  
-After that you can bind it to a default parameter in your services yaml so you can inject it into your own services.
+After that you can bind it to a default parameter in your services yaml, so you can inject it into your own services.
 
 ```yaml
 services:
@@ -145,7 +145,7 @@ class AddOrderHandler
 
 If you don't want to configure your repository then don't add it to the list and configue it yourself.
 
-When snapshotting is enabled and the snapshotting service points to a valid instance of 
+When snapshotting is enabled, and the snapshotting service points to a valid instance of 
 **EventSauce\EventSourcing\Snapshotting\SnapshotRepository** every provided aggregate (under aggregates in message_repository configuration) 
 that implements  **EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting** will automatically configure the
 message repository as well as the snapshot repository.
@@ -157,13 +157,13 @@ EventSauce has a number of interfaces that are auto configured when this bundle 
 ### Consumers
 
 Consumers are responsible for handling events from the aggregates. The message dispatcher is responsible for delegating the
-events to the consumers. Every class that you create and implements **EventSauce\EventSourcing\Consumer** will automatically 
-receive events from the message dispatcher. However if you intent to use Symfony messenger you must implement the __invoke
+events to the consumers. Every class you create and implements **EventSauce\EventSourcing\Consumer** will automatically 
+receive events from the message dispatcher. However, if you intent to use Symfony messenger you must implement the __invoke
 method. To overcome this limitation you can use the **ConsumableTrait** provided in the bundle. This will make sure it will work
 with the default message dispatcher from EventSauce as wel as the symfony messenger component. The trait will also let consumer's
 handler the events the same way as the aggregate repository does. It will look for methods that start with apply and after that the
 name of the event. Let's say we have a **OrderCreated** class which is an event that indicated ther order was created. Now we 
-want to sent an email notifcation. For example we can create a listener as follows:
+want to send an email notifcation. For example, we can create a listener as follows:
 
 ```php
 <?php
@@ -185,7 +185,7 @@ class SendMailNotification implements Consumer
             $this->mailer = $mailer;
         }
         
-        protected function applyOrderCreated(OrderCreated $event)
+        protected function applyOrderCreated(OrderCreated $event): void
         {
             $message = new \Swift_Message(); 
             
@@ -200,12 +200,12 @@ Whenever an order is created the method applyOrderCreated will be called.
 
 ### Message decorators
 
-Message decorators allow you to add extra headers to a message. Every class that you create and implements 
+Message decorators allow you to add extra headers to a message. Every class you create and implements 
 **EventSauce\EventSourcing\MessageDecorator** will automatically add the headers that you define to the persisted message.
 
 ### Upcasting
 
-Upcasters can transform messages in case events change. Every class that you create and implements 
+Upcasters can transform messages in case events change. Every class you create and implements 
 **EventSauce\EventSourcing\Upcasting\DelegatableUpcaster** will automatically be used.
 
 ## Overriding default services

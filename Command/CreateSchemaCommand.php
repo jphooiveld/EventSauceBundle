@@ -58,11 +58,11 @@ final class CreateSchemaCommand extends Command
      * {@inheritDoc}
      * @throws DBALException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$input->getOption('force')) {
             $output->writeln('You must use the --force option to execute this command.');
-            return -1;
+            return 1;
         }
 
         $schema = new Schema();
@@ -80,6 +80,7 @@ final class CreateSchemaCommand extends Command
         $table->addUniqueIndex(['aggregate_root_id', 'aggregate_root_version']);
 
         $platform = $this->connection->getDatabasePlatform();
+
         $queries  = $schema->toSql($platform);
 
         foreach ($queries as $query) {
@@ -88,6 +89,6 @@ final class CreateSchemaCommand extends Command
 
         $output->writeln(sprintf('Table %s created', $this->bag->get('jphooiveld_eventsauce.repository.doctrine.table')));
 
-        return -1;
+        return 0;
     }
 }

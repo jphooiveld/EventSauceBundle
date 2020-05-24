@@ -16,7 +16,7 @@ final class JphooiveldEventSauceBundle extends Bundle
     /**
      * {@inheritDoc}
      */
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new ConsumerCompilerPass());
         $container->addCompilerPass(new DelegatableUpcasterCompilerPass());

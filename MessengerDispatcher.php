@@ -26,10 +26,7 @@ final class MessengerDispatcher implements MessageDispatcher
         $this->eventBus = $eventBus;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function dispatch(Message ...$messages)
+    public function dispatch(Message ...$messages): void
     {
         foreach ($messages as $message) {
             $this->eventBus->dispatch(new Envelope($message));

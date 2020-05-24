@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class ConsumableTraitTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $event   = TodoCreated::fromPayload(['id' => 1, 'name' => 'foo']);
         $message = new Message($event);
@@ -25,11 +25,11 @@ final class ConsumableTraitTest extends TestCase
         $consumer = new NotifyCreated($storage);
         $consumer->handle($message);
 
-        $this->assertEquals(1, $storage->id);
-        $this->assertEquals('foo', $storage->name);
+        self::assertSame(1, $storage->id);
+        self::assertSame('foo', $storage->name);
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $event   = TodoCreated::fromPayload(['id' => 2, 'name' => 'bar']);
         $message = new Message($event);
@@ -38,7 +38,7 @@ final class ConsumableTraitTest extends TestCase
         $consumer = new NotifyCreated($storage);
         $consumer($message);
 
-        $this->assertEquals(2, $storage->id);
-        $this->assertEquals('bar', $storage->name);
+        self::assertSame(2, $storage->id);
+        self::assertSame('bar', $storage->name);
     }
 }

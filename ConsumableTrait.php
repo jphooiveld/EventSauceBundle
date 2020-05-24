@@ -13,9 +13,6 @@ trait ConsumableTrait
         $this->handle($message);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function handle(Message $message): void
     {
         $event      = $message->event();

@@ -17,7 +17,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
  */
 final class MessengerDispatcherTest extends TestCase
 {
-    public function testDispatch()
+    public function testDispatch(): void
     {
         $event1   = TodoCreated::fromPayload(['id' => 1, 'name' => 'foo']);
         $message1 = new Message($event1);
@@ -25,9 +25,9 @@ final class MessengerDispatcherTest extends TestCase
         $message2 = new Message($event2);
 
         $bus = $this->createMock(MessageBusInterface::class);
-        $bus->expects($this->exactly(2))->method('dispatch')->will($this->returnCallback(function ($message) use ($message1, $message2) {
+        $bus->expects($this->exactly(2))->method('dispatch')->willReturnCallback(static function ($message) use ($message1, $message2) {
             return new  Envelope($message === $message1 ? $message1 : $message2);
-        }));
+        });
 
         $dispatcher = new MessengerDispatcher($bus);
         $dispatcher->dispatch($message1, $message2);

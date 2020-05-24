@@ -18,7 +18,7 @@ final class TodoCreated implements SerializablePayload
     private $name;
 
     /**
-     * {@inheritDoc}
+     * @return mixed[]
      */
     public function toPayload(): array
     {
@@ -29,7 +29,8 @@ final class TodoCreated implements SerializablePayload
     }
 
     /**
-     * {@inheritDoc}
+     * @param mixed[] $payload
+     * @return self
      */
     public static function fromPayload(array $payload): SerializablePayload
     {

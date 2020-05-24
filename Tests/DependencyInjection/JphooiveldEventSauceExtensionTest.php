@@ -23,7 +23,7 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testDefaultAliasses()
+    public function testDefaultAliasses(): void
     {
         $configuration = new ContainerBuilder();
         $loader        = new JphooiveldEventSauceExtension();
@@ -31,20 +31,20 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
 
         $loader->load([$config], $configuration);
 
-        $this->assertEquals('jphooiveld_eventsauce.message_dispatcher.synchronous', (string)$configuration->getAlias('jphooiveld_eventsauce.message_dispatcher'));
-        $this->assertEquals('jphooiveld_eventsauce.clock.system', (string)$configuration->getAlias('jphooiveld_eventsauce.clock'));
-        $this->assertEquals('jphooiveld_eventsauce.message_decorator.chain', (string)$configuration->getAlias('jphooiveld_eventsauce.message_decorator'));
-        $this->assertEquals('jphooiveld_eventsauce.inflector.dot_separated_snake_case', (string)$configuration->getAlias('jphooiveld_eventsauce.inflector'));
-        $this->assertEquals('jphooiveld_eventsauce.message_repository.doctrine', (string)$configuration->getAlias('jphooiveld_eventsauce.message_repository'));
-        $this->assertEquals('jphooiveld_eventsauce.payload_serializer.constructing', (string)$configuration->getAlias('jphooiveld_eventsauce.payload_serializer'));
-        $this->assertEquals('jphooiveld_eventsauce.message_serializer.constructing', (string)$configuration->getAlias('jphooiveld_eventsauce.message_serializer'));
-        $this->assertEquals('jphooiveld_eventsauce.upcaster.delegating', (string)$configuration->getAlias('jphooiveld_eventsauce.upcaster'));
+        self::assertSame('jphooiveld_eventsauce.message_dispatcher.synchronous', (string)$configuration->getAlias('jphooiveld_eventsauce.message_dispatcher'));
+        self::assertSame('jphooiveld_eventsauce.clock.system', (string)$configuration->getAlias('jphooiveld_eventsauce.clock'));
+        self::assertSame('jphooiveld_eventsauce.message_decorator.chain', (string)$configuration->getAlias('jphooiveld_eventsauce.message_decorator'));
+        self::assertSame('jphooiveld_eventsauce.inflector.dot_separated_snake_case', (string)$configuration->getAlias('jphooiveld_eventsauce.inflector'));
+        self::assertSame('jphooiveld_eventsauce.message_repository.doctrine', (string)$configuration->getAlias('jphooiveld_eventsauce.message_repository'));
+        self::assertSame('jphooiveld_eventsauce.payload_serializer.constructing', (string)$configuration->getAlias('jphooiveld_eventsauce.payload_serializer'));
+        self::assertSame('jphooiveld_eventsauce.message_serializer.constructing', (string)$configuration->getAlias('jphooiveld_eventsauce.message_serializer'));
+        self::assertSame('jphooiveld_eventsauce.upcaster.delegating', (string)$configuration->getAlias('jphooiveld_eventsauce.upcaster'));
     }
 
     /**
      * @throws Exception
      */
-    public function testTimezone()
+    public function testTimezone(): void
     {
         $configuration = new ContainerBuilder();
         $loader        = new JphooiveldEventSauceExtension();
@@ -53,35 +53,35 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
         $config['time_of_recording']['timezone'] = 'Europe/Amsterdam';
 
         $loader->load([$config], $configuration);
-        $this->assertEquals('Europe/Amsterdam', $configuration->getParameter('jphooiveld_eventsauce.time_of_recording.timezone'));
+        self::assertSame('Europe/Amsterdam', $configuration->getParameter('jphooiveld_eventsauce.time_of_recording.timezone'));
     }
 
     /**
      * @throws Exception
      */
-    public function testDispatcherSynchronous()
+    public function testDispatcherSynchronous(): void
     {
         $configuration = new ContainerBuilder();
         $loader        = new JphooiveldEventSauceExtension();
         $config        = $this->getDefaultConfig();
 
         $loader->load([$config], $configuration);
-        $this->assertEquals('jphooiveld_eventsauce.message_dispatcher.synchronous', (string)$configuration->getAlias('jphooiveld_eventsauce.message_dispatcher'));
-        $this->assertFalse($configuration->hasDefinition('jphooiveld_eventsauce.message_dispatcher.messenger'));
+        self::assertSame('jphooiveld_eventsauce.message_dispatcher.synchronous', (string)$configuration->getAlias('jphooiveld_eventsauce.message_dispatcher'));
+        self::assertFalse($configuration->hasDefinition('jphooiveld_eventsauce.message_dispatcher.messenger'));
 
         $autoConfiguration = $configuration->getAutoconfiguredInstanceof();
 
-        $this->assertArrayHasKey(Consumer::class, $autoConfiguration);
+        self::assertArrayHasKey(Consumer::class, $autoConfiguration);
 
         $definition = $autoConfiguration[Consumer::class];
 
-        $this->assertTrue($definition->hasTag('eventsauce.consumer'));
+        self::assertTrue($definition->hasTag('eventsauce.consumer'));
     }
 
     /**
      * @throws Exception
      */
-    public function testDispatcherMessenger()
+    public function testDispatcherMessenger(): void
     {
         $configuration = new ContainerBuilder();
         $loader        = new JphooiveldEventSauceExtension();
@@ -92,26 +92,26 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
 
         $loader->load([$config], $configuration);
 
-        $this->assertEquals('jphooiveld_eventsauce.message_dispatcher.messenger', (string)$configuration->getAlias('jphooiveld_eventsauce.message_dispatcher'));
+        self::assertSame('jphooiveld_eventsauce.message_dispatcher.messenger', (string)$configuration->getAlias('jphooiveld_eventsauce.message_dispatcher'));
 
         $autoConfiguration = $configuration->getAutoconfiguredInstanceof();
 
-        $this->assertArrayHasKey(Consumer::class, $autoConfiguration);
+        self::assertArrayHasKey(Consumer::class, $autoConfiguration);
 
         $definition = $autoConfiguration[Consumer::class];
 
-        $this->assertTrue($definition->hasTag('messenger.message_handler'));
+        self::assertTrue($definition->hasTag('messenger.message_handler'));
 
         $tag = $definition->getTag('messenger.message_handler');
 
-        $this->assertArrayHasKey('bus', $tag[0]);
-        $this->assertEquals('messenger.bus.foo', $tag[0]['bus']);
+        self::assertArrayHasKey('bus', $tag[0]);
+        self::assertSame('messenger.bus.foo', $tag[0]['bus']);
     }
 
     /**
      * @throws Exception
      */
-    public function testRepositoryWithoutDoctrine()
+    public function testRepositoryWithoutDoctrine(): void
     {
         $configuration = new ContainerBuilder();
         $loader        = new JphooiveldEventSauceExtension();
@@ -122,15 +122,15 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
 
         $loader->load([$config], $configuration);
 
-        $this->assertEquals('foo', (string)$configuration->getAlias('jphooiveld_eventsauce.message_repository'));
-        $this->assertFalse($configuration->hasDefinition('jphooiveld_eventsauce.message_repository.doctrine'));
-        $this->assertFalse($configuration->hasDefinition('jphooiveld_eventsauce.command.create_schema'));
+        self::assertSame('foo', (string)$configuration->getAlias('jphooiveld_eventsauce.message_repository'));
+        self::assertFalse($configuration->hasDefinition('jphooiveld_eventsauce.message_repository.doctrine'));
+        self::assertFalse($configuration->hasDefinition('jphooiveld_eventsauce.command.create_schema'));
     }
 
     /**
      * @throws Exception
      */
-    public function testRepositoryWithDoctrine()
+    public function testRepositoryWithDoctrine(): void
     {
         $configuration = new ContainerBuilder();
         $loader        = new JphooiveldEventSauceExtension();
@@ -141,13 +141,16 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
 
         $loader->load([$config], $configuration);
 
-        $this->assertEquals('jphooiveld_eventsauce.message_repository.doctrine', (string)$configuration->getAlias('jphooiveld_eventsauce.message_repository'));
-        $this->assertTrue($configuration->hasDefinition('jphooiveld_eventsauce.command.create_schema'));
-        $this->assertEquals('bar', $configuration->getParameter('jphooiveld_eventsauce.repository.doctrine.table'));
-        $this->assertEquals(JSON_PRETTY_PRINT | JSON_PRESERVE_ZERO_FRACTION, $configuration->getParameter('jphooiveld_eventsauce.repository.doctrine.json_options'));
+        self::assertSame('jphooiveld_eventsauce.message_repository.doctrine', (string)$configuration->getAlias('jphooiveld_eventsauce.message_repository'));
+        self::assertTrue($configuration->hasDefinition('jphooiveld_eventsauce.command.create_schema'));
+        self::assertSame('bar', $configuration->getParameter('jphooiveld_eventsauce.repository.doctrine.table'));
+        self::assertSame(JSON_PRETTY_PRINT | JSON_PRESERVE_ZERO_FRACTION, $configuration->getParameter('jphooiveld_eventsauce.repository.doctrine.json_options'));
     }
 
-    public function testInvalidJsonOptions()
+    /**
+     * @throws Exception
+     */
+    public function testInvalidJsonOptions(): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
