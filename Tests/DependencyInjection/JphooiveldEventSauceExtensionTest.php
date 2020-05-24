@@ -144,7 +144,7 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
         self::assertSame('jphooiveld_eventsauce.message_repository.doctrine', (string)$configuration->getAlias('jphooiveld_eventsauce.message_repository'));
         self::assertTrue($configuration->hasDefinition('jphooiveld_eventsauce.command.create_schema'));
         self::assertSame('bar', $configuration->getParameter('jphooiveld_eventsauce.repository.doctrine.table'));
-        self::assertSame(JSON_PRETTY_PRINT | JSON_PRESERVE_ZERO_FRACTION, $configuration->getParameter('jphooiveld_eventsauce.repository.doctrine.json_options'));
+        self::assertSame(JSON_PRETTY_PRINT | JSON_PRESERVE_ZERO_FRACTION, $configuration->getParameter('jphooiveld_eventsauce.repository.doctrine.json_encode_options'));
     }
 
     /**
@@ -158,7 +158,7 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
         $loader        = new JphooiveldEventSauceExtension();
         $config        = $this->getDefaultConfig();
 
-        $config['message_repository']['doctrine']['json_options'][] = 3;
+        $config['message_repository']['doctrine']['json_encode_options'][] = 3;
 
         $loader->load([$config], $configuration);
     }
@@ -177,7 +177,7 @@ message_repository:
         enabled: true
         connection: doctrine.dbal.default_connection
         table: event
-        json_options:
+        json_encode_options:
             - !php/const JSON_PRETTY_PRINT
             - !php/const JSON_PRESERVE_ZERO_FRACTION
     aggregates:
