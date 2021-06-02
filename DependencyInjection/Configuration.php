@@ -27,7 +27,7 @@ final class Configuration implements ConfigurationInterface
             $validJsonConstants[] = JSON_THROW_ON_ERROR;
         }
 
-        $treeBuilder = new TreeBuilder('jphooiveld_eventsauce');
+        $treeBuilder = new TreeBuilder('jphooiveld_event_sauce');
 
         //@formatter:off
         $treeBuilder->getRootNode()
