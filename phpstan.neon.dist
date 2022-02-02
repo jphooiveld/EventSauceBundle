@@ -6,7 +6,7 @@ parameters:
         - .
         - Command
         - DependencyInjection
-    excludes_analyse:
+    excludePaths:
         - Resources
         - Tests
         - vendor
