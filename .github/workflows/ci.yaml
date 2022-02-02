@@ -22,7 +22,7 @@ jobs:
               with:
                   php-version: ${{ matrix.php }}
                   tools: phpstan
-                  coverage: none
+                  coverage: pcov
 
             - name: Checkout code
               uses: actions/checkout@v2
