@@ -3,26 +3,16 @@ declare(strict_types=1);
 
 namespace Jphooiveld\Bundle\EventSauceBundle\Tests\Consumer;
 
-use EventSauce\EventSourcing\Consumer;
+use EventSauce\EventSourcing\MessageConsumer;
 use Jphooiveld\Bundle\EventSauceBundle\ConsumableTrait;
 
-final class NotifyCreated implements Consumer
+final class NotifyCreated implements MessageConsumer
 {
     use ConsumableTrait;
 
-    /**
-     * @var TodoStorage
-     */
-    private $storage;
-
-    /**
-     * Constructor
-     *
-     * @param TodoStorage $storage
-     */
-    public function __construct(TodoStorage $storage)
-    {
-        $this->storage = $storage;
+    public function __construct(
+        private TodoStorage $storage,
+    ) {
     }
 
     public function applyTodoCreated(TodoCreated $event): void

@@ -8,7 +8,7 @@
             <argument>%jphooiveld_eventsauce.time_of_recording.timezone%</argument>
         </service>
 
-        <service id="jphooiveld_eventsauce.clock.system" class="EventSauce\EventSourcing\Time\SystemClock">
+        <service id="jphooiveld_eventsauce.clock.system" class="EventSauce\Clock\SystemClock">
             <argument type="service" id="jphooiveld_eventsauce.date_time_zone"/>
         </service>
         <service id="jphooiveld_eventsauce.clock" alias="jphooiveld_eventsauce.clock.system"/>

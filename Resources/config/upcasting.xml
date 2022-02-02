@@ -4,15 +4,15 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="jphooiveld_eventsauce.upcaster.delegating" class="EventSauce\EventSourcing\Upcasting\DelegatingUpcaster" public="false">
+        <service id="jphooiveld_eventsauce.upcaster.chain" class="EventSauce\EventSourcing\Upcasting\UpcasterChain" public="false">
             <argument/>
         </service>
 
-        <service id="jphooiveld_eventsauce.upcaster" alias="jphooiveld_eventsauce.upcaster.delegating"/>
-
-        <service id="jphooiveld_eventsauce.event_serializer.upcasting" class="EventSauce\EventSourcing\Serialization\UpcastingMessageSerializer" decorates="jphooiveld_eventsauce.message_serializer">
-            <argument type="service" id="jphooiveld_eventsauce.event_serializer.upcasting.inner"/>
-            <argument type="service" id="jphooiveld_eventsauce.upcaster"/>
+        <service id="jphooiveld_eventsauce.upcaster.message_serializer" class="EventSauce\EventSourcing\Upcasting\UpcastingMessageSerializer" decorates="jphooiveld_eventsauce.message_serializer" public="false">
+            <argument type="service" id=".inner"/>
+            <argument type="service" id="jphooiveld_eventsauce.upcaster.chain"/>
         </service>
+
+        <service id="jphooiveld_eventsauce.upcaster" alias="jphooiveld_eventsauce.upcaster.message_serializer"/>
     </services>
 </container>

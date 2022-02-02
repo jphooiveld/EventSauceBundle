@@ -10,13 +10,11 @@ use Jphooiveld\Bundle\EventSauceBundle\Tests\Consumer\TodoStorage;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class ConsumableTraitTest
- * @package Jphooiveld\Bundle\EventSauceBundle\Tests
  * @covers \Jphooiveld\Bundle\EventSauceBundle\ConsumableTrait
  */
 final class ConsumableTraitTest extends TestCase
 {
-    public function testHandle(): void
+    public function test_handle(): void
     {
         $event   = TodoCreated::fromPayload(['id' => 1, 'name' => 'foo']);
         $message = new Message($event);
@@ -29,7 +27,7 @@ final class ConsumableTraitTest extends TestCase
         self::assertSame('foo', $storage->name);
     }
 
-    public function testInvoke(): void
+    public function test_invoke(): void
     {
         $event   = TodoCreated::fromPayload(['id' => 2, 'name' => 'bar']);
         $message = new Message($event);

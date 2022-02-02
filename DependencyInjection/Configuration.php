@@ -11,7 +11,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 final class Configuration implements ConfigurationInterface
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
@@ -19,13 +19,9 @@ final class Configuration implements ConfigurationInterface
             JSON_FORCE_OBJECT, JSON_HEX_QUOT, JSON_HEX_TAG, JSON_HEX_AMP, JSON_HEX_APOS,
             JSON_INVALID_UTF8_IGNORE, JSON_INVALID_UTF8_SUBSTITUTE, JSON_NUMERIC_CHECK,
             JSON_PARTIAL_OUTPUT_ON_ERROR, JSON_PRESERVE_ZERO_FRACTION, JSON_PRETTY_PRINT,
-            JSON_UNESCAPED_LINE_TERMINATORS, JSON_UNESCAPED_SLASHES, JSON_UNESCAPED_UNICODE
+            JSON_UNESCAPED_LINE_TERMINATORS, JSON_UNESCAPED_SLASHES, JSON_UNESCAPED_UNICODE,
+            JSON_THROW_ON_ERROR
         ];
-
-        if (PHP_VERSION_ID >= 70300) {
-            /** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
-            $validJsonConstants[] = JSON_THROW_ON_ERROR;
-        }
 
         $treeBuilder = new TreeBuilder('jphooiveld_event_sauce');
 

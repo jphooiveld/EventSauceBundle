@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\Compiler;
 
 use EventSauce\EventSourcing\AggregateRoot;
-use EventSauce\EventSourcing\ConstructingAggregateRootRepository;
+use EventSauce\EventSourcing\EventSourcedAggregateRootRepository;
 use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use EventSauce\EventSourcing\Snapshotting\ConstructingAggregateRootRepositoryWithSnapshotting;
 use LogicException;
@@ -19,15 +19,17 @@ use Symfony\Component\DependencyInjection\Reference;
 final class AggregateRepositoryCompilerPass implements CompilerPassInterface
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      * @throws ReflectionException
      */
     public function process(ContainerBuilder $container): void
     {
         $snapshotEnabled = $container->getParameter('jphooiveld_eventsauce.snapshot_repository.enabled');
 
-        /** @var class-string<\EventSauce\EventSourcing\AggregateRoot> $className */
-        foreach ($container->getParameter('jphooiveld_eventsauce.message_repository.aggregates') as $className) {
+        /** @var class-string<AggregateRoot>[] $classNames */
+        $classNames = $container->getParameter('jphooiveld_eventsauce.message_repository.aggregates');
+
+        foreach ($classNames as $className) {
             if (is_a($className, AggregateRoot::class, true)) {
                 $reflectionClass = new ReflectionClass($className);
                 $shortClassName  = $reflectionClass->getShortName();
@@ -96,7 +98,7 @@ final class AggregateRepositoryCompilerPass implements CompilerPassInterface
             new Reference('jphooiveld_eventsauce.message_decorator'),
         ];
 
-        $definition = new Definition(ConstructingAggregateRootRepository::class, $arguments);
+        $definition = new Definition(EventSourcedAggregateRootRepository::class, $arguments);
         $container->setDefinition($serviceId, $definition);
     }
 }

@@ -7,15 +7,9 @@ use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
 final class TodoCreated implements SerializablePayload
 {
-    /**
-     * @var int ID
-     */
-    private $id;
+    private int $id;
 
-    /**
-     * @var string Name
-     */
-    private $name;
+    private string $name;
 
     /**
      * @return mixed[]
@@ -30,9 +24,8 @@ final class TodoCreated implements SerializablePayload
 
     /**
      * @param mixed[] $payload
-     * @return self
      */
-    public static function fromPayload(array $payload): SerializablePayload
+    public static function fromPayload(array $payload): self
     {
         $self       = new self();
         $self->id   = $payload['id'];

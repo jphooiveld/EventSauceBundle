@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\Reference;
 final class ConsumerCompilerPass implements CompilerPassInterface
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function process(ContainerBuilder $container): void
     {

@@ -3,3 +3,4 @@ vendor/
 composer.lock
 *.sh
 *.cache
+/docker-compose.yml

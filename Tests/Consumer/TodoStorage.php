@@ -5,13 +5,7 @@ namespace Jphooiveld\Bundle\EventSauceBundle\Tests\Consumer;
 
 final class TodoStorage
 {
-    /**
-     * @var int
-     */
-    public $id;
+    public int $id;
 
-    /**
-     * @var string
-     */
-    public $name;
+    public string $name;
 }

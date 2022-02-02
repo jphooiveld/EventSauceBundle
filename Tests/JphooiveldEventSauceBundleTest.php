@@ -5,20 +5,18 @@ namespace Jphooiveld\Bundle\EventSauceBundle\Tests;
 
 use Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\Compiler\AggregateRepositoryCompilerPass;
 use Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\Compiler\ConsumerCompilerPass;
-use Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\Compiler\DelegatableUpcasterCompilerPass;
 use Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\Compiler\MessageDecoratorCompilerPass;
+use Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\Compiler\UpcasterCompilerPass;
 use Jphooiveld\Bundle\EventSauceBundle\JphooiveldEventSauceBundle;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Class JphooiveldEventSauceBundleTest
- * @package Jphooiveld\Bundle\EventSauceBundle\Tests
  * @covers \Jphooiveld\Bundle\EventSauceBundle\JphooiveldEventSauceBundle
  */
 final class JphooiveldEventSauceBundleTest extends TestCase
 {
-    public function testCompilerPasses(): void
+    public function test_compiler_passes(): void
     {
         $container = new ContainerBuilder();
         $bundle    = new JphooiveldEventSauceBundle();
@@ -26,7 +24,7 @@ final class JphooiveldEventSauceBundleTest extends TestCase
         $passes = $container->getCompiler()->getPassConfig()->getPasses();
 
         $this->assertContainsCompilerPass($passes, ConsumerCompilerPass::class);
-        $this->assertContainsCompilerPass($passes, DelegatableUpcasterCompilerPass::class);
+        $this->assertContainsCompilerPass($passes, UpcasterCompilerPass::class);
         $this->assertContainsCompilerPass($passes, MessageDecoratorCompilerPass::class);
         $this->assertContainsCompilerPass($passes, AggregateRepositoryCompilerPass::class);
     }

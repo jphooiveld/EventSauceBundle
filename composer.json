@@ -20,27 +20,29 @@
         }
     ],
     "require": {
-        "php": "^7.2.5|^8.0",
+        "php": "^8.1",
         "ext-json": "*",
-        "eventsauce/eventsauce": "^0.8",
-        "eventsauce/doctrine-message-repository": "^0.8",
-        "symfony/console": "^4.2|^5.0",
-        "symfony/messenger": "^4.2|^5.0",
-        "symfony/config": "^4.2|^5.0",
-        "symfony/dependency-injection": "^4.2|^5.0",
-        "symfony/http-kernel": "^4.2|^5.0"
+        "eventsauce/eventsauce": "^1.0",
+        "eventsauce/message-repository-for-doctrine": "^0.2",
+        "symfony/console": "^5.4|^6.0",
+        "symfony/messenger": "^5.4|^6.0",
+        "symfony/config": "^5.4|^6.0",
+        "symfony/dependency-injection": "^5.4|^6.0",
+        "symfony/http-kernel": "^5.4|^6.0"
     },
     "require-dev": {
-        "doctrine/dbal": "^2.6.0",
-        "roave/security-advisories": "dev-master",
-        "symfony/framework-bundle": "^4.2|^5.0",
+        "eventsauce/test-utilities": "^1.0",
+        "doctrine/dbal": "^3.1",
+        "roave/security-advisories": "dev-latest",
+        "symfony/framework-bundle": "^5.4|^6.0",
+        "symfony/yaml": "^5.4|^6.0",
         "symfony/phpunit-bridge": "^5.0",
-        "phpstan/phpstan-phpunit": "^0.12.8",
-        "phpstan/phpstan-symfony": "^0.12.6",
-        "phpstan/phpstan-deprecation-rules": "^0.12.2",
+        "phpstan/phpstan-phpunit": "^1.0",
+        "phpstan/phpstan-symfony": "^1.0",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/extension-installer": "^1.0",
-        "phpstan/phpstan": "^0.12.19",
-        "friendsofphp/php-cs-fixer": "^2.16"
+        "phpstan/phpstan": "^1.0",
+        "friendsofphp/php-cs-fixer": "^3.0"
     },
     "suggest": {
         "symfony/console": "Using symfony console to create event sourcing table",
@@ -53,5 +55,10 @@
         "exclude-from-classmap": [
             "/Tests/"
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
     }
 }

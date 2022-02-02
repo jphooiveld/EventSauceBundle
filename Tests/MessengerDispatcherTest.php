@@ -11,13 +11,11 @@ use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
- * Class MessengerDispatcherTest
- * @package Jphooiveld\Bundle\EventSauceBundle\Tests
  * @covers \Jphooiveld\Bundle\EventSauceBundle\MessengerDispatcher
  */
 final class MessengerDispatcherTest extends TestCase
 {
-    public function testDispatch(): void
+    public function test_dispatch(): void
     {
         $event1   = TodoCreated::fromPayload(['id' => 1, 'name' => 'foo']);
         $message1 = new Message($event1);

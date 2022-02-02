@@ -9,8 +9,10 @@ use PHPUnit\Framework\TestCase;
 
 final class ConfigurationTest extends TestCase
 {
-
-    public function testTreeRootNameMatchesExtensionAlias()
+    /**
+     * @covers \Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\Configuration
+     */
+    public function test_tree_root_name_matches_extension_alias(): void
     {
         $configuration = new Configuration();
         $extension     = new JphooiveldEventSauceExtension();

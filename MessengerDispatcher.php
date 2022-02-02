@@ -11,19 +11,9 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 final class MessengerDispatcher implements MessageDispatcher
 {
-    /**
-     * @var MessageBusInterface Symfony event bus
-     */
-    private $eventBus;
-
-    /**
-     * Constructor
-     *
-     * @param MessageBusInterface $eventBus Symfony event bus
-     */
-    public function __construct(MessageBusInterface $eventBus)
-    {
-        $this->eventBus = $eventBus;
+    public function __construct(
+        private MessageBusInterface $eventBus,
+    ) {
     }
 
     public function dispatch(Message ...$messages): void

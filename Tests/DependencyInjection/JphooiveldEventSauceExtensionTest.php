@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Jphooiveld\Bundle\EventSauceBundle\Tests\DependencyInjection;
 
-use EventSauce\EventSourcing\Consumer;
+use EventSauce\EventSourcing\MessageConsumer;
 use Exception;
 use Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\JphooiveldEventSauceExtension;
 use PHPUnit\Framework\TestCase;
@@ -13,8 +13,6 @@ use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Class JphooiveldEventSauceExtensionTest
- * @package Jphooiveld\Bundle\EventSauceBundle\Tests\DependencyInjection
  * @covers \Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\JphooiveldEventSauceExtension
  * @covers \Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\Configuration
  */
@@ -23,7 +21,7 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testDefaultAliasses(): void
+    public function test_default_aliasses(): void
     {
         $configuration = new ContainerBuilder();
         $loader        = new JphooiveldEventSauceExtension();
@@ -38,13 +36,13 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
         self::assertSame('jphooiveld_eventsauce.message_repository.doctrine', (string)$configuration->getAlias('jphooiveld_eventsauce.message_repository'));
         self::assertSame('jphooiveld_eventsauce.payload_serializer.constructing', (string)$configuration->getAlias('jphooiveld_eventsauce.payload_serializer'));
         self::assertSame('jphooiveld_eventsauce.message_serializer.constructing', (string)$configuration->getAlias('jphooiveld_eventsauce.message_serializer'));
-        self::assertSame('jphooiveld_eventsauce.upcaster.delegating', (string)$configuration->getAlias('jphooiveld_eventsauce.upcaster'));
+        self::assertSame('jphooiveld_eventsauce.upcaster.message_serializer', (string)$configuration->getAlias('jphooiveld_eventsauce.upcaster'));
     }
 
     /**
      * @throws Exception
      */
-    public function testTimezone(): void
+    public function test_timezone(): void
     {
         $configuration = new ContainerBuilder();
         $loader        = new JphooiveldEventSauceExtension();
@@ -59,7 +57,7 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testDispatcherSynchronous(): void
+    public function test_dispatcher_synchronous(): void
     {
         $configuration = new ContainerBuilder();
         $loader        = new JphooiveldEventSauceExtension();
@@ -71,9 +69,9 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
 
         $autoConfiguration = $configuration->getAutoconfiguredInstanceof();
 
-        self::assertArrayHasKey(Consumer::class, $autoConfiguration);
+        self::assertArrayHasKey(MessageConsumer::class, $autoConfiguration);
 
-        $definition = $autoConfiguration[Consumer::class];
+        $definition = $autoConfiguration[MessageConsumer::class];
 
         self::assertTrue($definition->hasTag('eventsauce.consumer'));
     }
@@ -81,7 +79,7 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testDispatcherMessenger(): void
+    public function test_dispatcher_messenger(): void
     {
         $configuration = new ContainerBuilder();
         $loader        = new JphooiveldEventSauceExtension();
@@ -96,9 +94,9 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
 
         $autoConfiguration = $configuration->getAutoconfiguredInstanceof();
 
-        self::assertArrayHasKey(Consumer::class, $autoConfiguration);
+        self::assertArrayHasKey(MessageConsumer::class, $autoConfiguration);
 
-        $definition = $autoConfiguration[Consumer::class];
+        $definition = $autoConfiguration[MessageConsumer::class];
 
         self::assertTrue($definition->hasTag('messenger.message_handler'));
 
@@ -111,7 +109,7 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testRepositoryWithoutDoctrine(): void
+    public function test_repository_without_doctrine(): void
     {
         $configuration = new ContainerBuilder();
         $loader        = new JphooiveldEventSauceExtension();
@@ -130,7 +128,7 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testRepositoryWithDoctrine(): void
+    public function test_repository_with_doctrine(): void
     {
         $configuration = new ContainerBuilder();
         $loader        = new JphooiveldEventSauceExtension();
@@ -150,7 +148,7 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testInvalidJsonOptions(): void
+    public function test_invalid_json_options(): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
