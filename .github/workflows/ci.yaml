@@ -21,6 +21,7 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php }}
+                  tools: phpstan
                   coverage: none
 
             - name: Checkout code
@@ -34,3 +35,6 @@ jobs:
 
             - name: Run tests
               run: ./vendor/bin/simple-phpunit
+
+            - name: Run PHPStan
+              run: phpstan analyse src
