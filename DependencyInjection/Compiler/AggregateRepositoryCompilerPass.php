@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\Compiler;
 
 use EventSauce\EventSourcing\AggregateRoot;
+use EventSauce\EventSourcing\AggregateRootRepository;
 use EventSauce\EventSourcing\EventSourcedAggregateRootRepository;
+use EventSauce\EventSourcing\Snapshotting\AggregateRootRepositoryWithSnapshotting;
 use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use EventSauce\EventSourcing\Snapshotting\ConstructingAggregateRootRepositoryWithSnapshotting;
 use LogicException;
@@ -15,6 +17,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\String\ByteString;
 
 final class AggregateRepositoryCompilerPass implements CompilerPassInterface
 {
@@ -31,15 +34,11 @@ final class AggregateRepositoryCompilerPass implements CompilerPassInterface
 
         foreach ($classNames as $className) {
             if (is_a($className, AggregateRoot::class, true)) {
-                $reflectionClass = new ReflectionClass($className);
-                $shortClassName  = $reflectionClass->getShortName();
-                $servicePostFix  = preg_replace('~(?<=\\w)([A-Z])~', '_$1', $shortClassName);
-
-                if ($servicePostFix === null) {
-                    throw new LogicException('Service post fix must not be null');
-                }
-
-                $serviceId = sprintf('jphooiveld_eventsauce.aggregate_repository.%s', strtolower($servicePostFix));
+                $reflectionClass    = new ReflectionClass($className);
+                $shortClassName     = $reflectionClass->getShortName();
+                $servicePostFix     = (new ByteString($shortClassName))->snake();
+                $repositoryArgument = (new ByteString($shortClassName))->camel() . 'Repository';
+                $serviceId          = sprintf('jphooiveld_eventsauce.aggregate_repository.%s', $servicePostFix);
 
                 if ($container->hasDefinition($serviceId)) {
                     continue;
@@ -50,11 +49,11 @@ final class AggregateRepositoryCompilerPass implements CompilerPassInterface
                         throw new LogicException('Snapshotting is not enabled.');
                     }
 
-                    $this->createAggregateRootWithSnapshottingService($container, $serviceId, $className);
+                    $this->createAggregateRootWithSnapshottingService($container, $serviceId, $className, $repositoryArgument);
                     continue;
                 }
 
-                $this->createAggregateRootService($container, $serviceId, $className);
+                $this->createAggregateRootService($container, $serviceId, $className, $repositoryArgument);
                 continue;
             }
 
@@ -62,16 +61,11 @@ final class AggregateRepositoryCompilerPass implements CompilerPassInterface
         }
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param string $serviceId
-     * @param AggregateRootWithSnapshotting|string $className
-     */
-    private function createAggregateRootWithSnapshottingService(ContainerBuilder $container, string $serviceId, $className): void
+    private function createAggregateRootWithSnapshottingService(ContainerBuilder $container, string $serviceId, string $className, string $repositoryArgument): void
     {
         $innerServiceId = sprintf('%s.inner', $serviceId);
 
-        $this->createAggregateRootService($container, $innerServiceId, $className);
+        $this->createAggregateRootService($container, $innerServiceId, $className, $repositoryArgument);
 
         $arguments = [
             $className,
@@ -82,14 +76,10 @@ final class AggregateRepositoryCompilerPass implements CompilerPassInterface
 
         $definition = new Definition(ConstructingAggregateRootRepositoryWithSnapshotting::class, $arguments);
         $container->setDefinition($serviceId, $definition);
+        $container->registerAliasForArgument($serviceId, AggregateRootRepositoryWithSnapshotting::class, $repositoryArgument);
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param string $serviceId
-     * @param AggregateRoot|string $className
-     */
-    private function createAggregateRootService(ContainerBuilder $container, string $serviceId, $className): void
+    private function createAggregateRootService(ContainerBuilder $container, string $serviceId, string $className, string $repositoryArgument): void
     {
         $arguments = [
             $className,
@@ -100,5 +90,6 @@ final class AggregateRepositoryCompilerPass implements CompilerPassInterface
 
         $definition = new Definition(EventSourcedAggregateRootRepository::class, $arguments);
         $container->setDefinition($serviceId, $definition);
+        $container->registerAliasForArgument($serviceId, AggregateRootRepository::class, $repositoryArgument);
     }
 }

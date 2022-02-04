@@ -1,5 +1,5 @@
 # JphooiveldEventSauceBundle
-[![Build Status](https://travis-ci.com/jphooiveld/EventSauceBundle.svg?branch=master)](https://travis-ci.com/jphooiveld/EventSauceBundle)
+![BUild status](https://github.com/jphooiveld/EventSauceBundle/actions/workflows/ci.yaml/badge.svg)
 ## Info
 
 This bundle integrates EventSauce, and it's doctrine message repository into your symfony application.
@@ -108,19 +108,10 @@ class Order implements AggregateRoot
 ```
 
 If you add 'App\Domain\Order' to the list of aggregates in the configuration the compiler pass will 
-automatically create a service called **jphooiveld_eventsauce.aggregate_repository.order**.  
-After that you can bind it to a default parameter in your services yaml, so you can inject it into your own services.
+automatically create a service called **jphooiveld_eventsauce.aggregate_repository.order**. It will also
+create an argument binding named **$orderRepository** for interface **EventSauce\EventSourcing\AggregateRootRepository** for this repository so that you can inject it into your own services 
 
-```yaml
-services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
-        bind:
-            EventSauce\EventSourcing\AggregateRootRepository $orderRepository: '@jphooiveld_eventsauce.aggregate_repository.order'
-```
-
-Let's say we have a command handles that is responsible for persisting the order aggregate. We can now inject the 
+Let's say we have a command handler that is responsible for persisting the order aggregate. We can now inject the 
 order repository automatically for further use.
 
 ```php
@@ -132,11 +123,9 @@ use EventSauce\EventSourcing\AggregateRootRepository;
 
 class AddOrderHandler
 {
-    private $orderRepository;
-
-    public function __construct(AggregateRootRepository $orderRepository)
-    {
-        $this->orderRepository = $orderRepository;
+    public function __construct(
+        private AggregateRootRepository $orderRepository,
+    ) {
     }
     
     // other code
@@ -157,7 +146,7 @@ EventSauce has a number of interfaces that are auto configured when this bundle 
 ### Consumers
 
 Consumers are responsible for handling events from the aggregates. The message dispatcher is responsible for delegating the
-events to the consumers. Every class you create and implements **EventSauce\EventSourcing\Consumer** will automatically 
+events to the consumers. Every class you create and implements **EventSauce\EventSourcing\MessageConsumer** will automatically 
 receive events from the message dispatcher. However, if you intent to use Symfony messenger you must implement the __invoke
 method. To overcome this limitation you can use the **ConsumableTrait** provided in the bundle. This will make sure it will work
 with the default message dispatcher from EventSauce as wel as the symfony messenger component. The trait will also let consumer's
@@ -171,23 +160,23 @@ want to send an email notifcation. For example, we can create a listener as foll
 namespace App\Service;
 
 use App\Event\OrderCreated;
-use EventSauce\EventSourcing\Consumer;
+use EventSauce\EventSourcing\MessageConsumer;
 use Jphooiveld\Bundle\EventSauceBundle\ConsumableTrait;
+use Symfony\Component\Mailer\MailerInterface
+use Symfony\Component\Mime\RawMessage;
 
-class SendMailNotification implements Consumer
+class SendMailNotification implements MessageConsumer
 {
         use ConsumableTrait;
         
-        private $mailer;
-        
-        public function __construct(\Swift_Mailer $mailer) 
-        {
-            $this->mailer = $mailer;
+        public function __construct(
+            private MailerInterface $mailer,
+        ) {
         }
         
         protected function applyOrderCreated(OrderCreated $event): void
         {
-            $message = new \Swift_Message(); 
+            $message = new RawMessage(); 
             
             // other code
             
@@ -206,7 +195,7 @@ Message decorators allow you to add extra headers to a message. Every class you 
 ### Upcasting
 
 Upcasters can transform messages in case events change. Every class you create and implements 
-**EventSauce\EventSourcing\Upcasting\DelegatableUpcaster** will automatically be used.
+**EventSauce\EventSourcing\Upcasting\Upcaster** will automatically be used.
 
 ## Overriding default services
 
@@ -216,15 +205,15 @@ have to do is create your own services and override the aliases in the build met
 Beware that if you start to override services stuff can and will break because auto configuration uses a lot of the default
 implementations.
 
-| Alias                                      |Interface                                                 | Breaks auto configuration |
-|--------------------------------------------|----------------------------------------------------------| --------------------------|
-| jphooiveld_eventsauce.clock                | EventSauce\EventSourcing\Time\Clock                      | no                        |
+| Alias                                      | Interface                                             | Breaks auto configuration |
+|--------------------------------------------|-------------------------------------------------------| --------------------------|
+| jphooiveld_eventsauce.clock                | EventSauce\Clock\Clock                                | no                        |
 | jphooiveld_eventsauce.payload_serializer   | EventSauce\EventSourcing\Serialization\PayloadSerializer | no                        |
 | jphooiveld_eventsauce.message_serializer   | EventSauce\EventSourcing\Serialization\MessageSerializer | no                        |
-| jphooiveld_eventsauce.upcaster             | EventSauce\EventSourcing\Upcasting\Upcaster              | yes                       |
-| jphooiveld_eventsauce.inflector            | EventSauce\EventSourcing\ClassNameInflector              | no                        |
-| jphooiveld_eventsauce.message_decorator    | EventSauce\EventSourcing\MessageDecorator                | yes                       |
-| jphooiveld_eventsauce.message_dispatcher   | EventSauce\EventSourcing\MessageDispatcher               | yes                       |
+| jphooiveld_eventsauce.upcaster             | EventSauce\EventSourcing\Upcasting\Upcaster           | yes                       |
+| jphooiveld_eventsauce.inflector            | EventSauce\EventSourcing\ClassNameInflector           | no                        |
+| jphooiveld_eventsauce.message_decorator    | EventSauce\EventSourcing\MessageDecorator             | yes                       |
+| jphooiveld_eventsauce.message_dispatcher   | EventSauce\EventSourcing\MessageDispatcher            | yes                       |
 
 Let's say you want to create your own class inflector called **App\EventSourcing\UnderscoreInflector** 
 that implements interface  **EventSauce\EventSourcing\ClassNameInflector**. The only thing you need to do is set the 
