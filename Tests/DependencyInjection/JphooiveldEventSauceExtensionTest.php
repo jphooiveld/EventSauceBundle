@@ -179,6 +179,7 @@ message_repository:
             - !php/const JSON_PRETTY_PRINT
             - !php/const JSON_PRESERVE_ZERO_FRACTION
         table_schema: default
+        uuid_encoder: string
     aggregates:
         - 'Jphooiveld\Bundle\EventSauceBundle\Tests\Aggregate\Order'
 EOF;

@@ -67,6 +67,10 @@ final class JphooiveldEventSauceExtension extends Extension
                 $container->setAlias('jphooiveld_eventsauce.table_schema', 'jphooiveld_eventsauce.table_schema.legacy');
             }
 
+            if ($config['message_repository']['doctrine']['uuid_encoder'] === 'binary') {
+                $container->setAlias('jphooiveld_eventsauce.uuid_encoder', 'jphooiveld_eventsauce.uuid_encoder.binary');
+            }
+
             $definition = $container->getDefinition('jphooiveld_eventsauce.message_repository.doctrine');
             $definition->setArgument(0, new Reference($config['message_repository']['doctrine']['connection']));
 
