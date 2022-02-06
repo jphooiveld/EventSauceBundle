@@ -65,6 +65,8 @@ jphooiveld_event_sauce:
                 - !php/const JSON_PRESERVE_ZERO_FRACTION
             # Table schema to use: default (EventSauce 1.x) or legacy (EventSauce 0.8.x)  
             table_schema: default
+            # UUID encpder to use: string or binary)  
+            uuid_encoder: string
         # Configure provided aggregate roots to use the default repository implementations as created by the bundle 
         aggregates:
             - App\Domain\Order
