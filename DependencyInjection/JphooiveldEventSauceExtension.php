@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jphooiveld\Bundle\EventSauceBundle\DependencyInjection;
 
+use EventSauce\Clock\Clock;
 use EventSauce\EventSourcing\MessageConsumer;
 use EventSauce\EventSourcing\MessageDecorator;
 use EventSauce\EventSourcing\Upcasting\Upcaster;
@@ -86,5 +87,7 @@ final class JphooiveldEventSauceExtension extends Extension
         $container->setParameter('jphooiveld_eventsauce.time_of_recording.timezone', $config['time_of_recording']['timezone']);
         $container->registerForAutoconfiguration(MessageDecorator::class)->addTag('eventsauce.message_decorator');
         $container->registerForAutoconfiguration(Upcaster::class)->addTag('eventsauce.upcaster');
+        $container->registerAliasForArgument('jphooiveld_eventsauce.clock', Clock::class, 'clock');
+
     }
 }
