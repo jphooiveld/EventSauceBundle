@@ -4,11 +4,18 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <service id="jphooiveld_eventsauce.table_schema.default" class="EventSauce\MessageRepository\TableSchema\DefaultTableSchema" public="false"/>
+
+        <service id="jphooiveld_eventsauce.table_schema.legacy" class="EventSauce\MessageRepository\TableSchema\LegacyTableSchema" public="false"/>
+
+        <service id="jphooiveld_eventsauce.table_schema" alias="jphooiveld_eventsauce.table_schema.default"/>
+
         <service id="jphooiveld_eventsauce.message_repository.doctrine" class="EventSauce\MessageRepository\DoctrineV2MessageRepository\DoctrineUuidV4MessageRepository" public="false">
             <argument/>
             <argument>%jphooiveld_eventsauce.repository.doctrine.table%</argument>
             <argument type="service" id="jphooiveld_eventsauce.message_serializer"/>
             <argument>%jphooiveld_eventsauce.repository.doctrine.json_encode_options%</argument>
+            <argument type="service" id="jphooiveld_eventsauce.table_schema"/>
         </service>
     </services>
 </container>

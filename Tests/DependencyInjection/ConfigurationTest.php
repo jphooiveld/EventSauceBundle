@@ -21,7 +21,5 @@ final class ConfigurationTest extends TestCase
             $extension->getAlias(),
             $configuration->getConfigTreeBuilder()->buildTree()->getName()
         );
-
     }
-
 }

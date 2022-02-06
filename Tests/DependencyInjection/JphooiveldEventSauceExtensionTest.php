@@ -178,6 +178,7 @@ message_repository:
         json_encode_options:
             - !php/const JSON_PRETTY_PRINT
             - !php/const JSON_PRESERVE_ZERO_FRACTION
+        table_schema: default
     aggregates:
         - 'Jphooiveld\Bundle\EventSauceBundle\Tests\Aggregate\Order'
 EOF;
