@@ -64,7 +64,7 @@ final class JphooiveldEventSauceExtension extends Extension
             $container->setParameter('jphooiveld_eventsauce.repository.doctrine.json_encode_options', $jsonOptions);
 
             if ($config['message_repository']['doctrine']['table_schema'] === 'legacy') {
-                $container->setAlias('jphooiveld_eventsauce.table_schema', 'phooiveld_eventsauce.table_schema.legacy');
+                $container->setAlias('jphooiveld_eventsauce.table_schema', 'jphooiveld_eventsauce.table_schema.legacy');
             }
 
             $definition = $container->getDefinition('jphooiveld_eventsauce.message_repository.doctrine');
