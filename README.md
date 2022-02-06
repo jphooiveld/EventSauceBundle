@@ -202,7 +202,7 @@ Upcasters can transform messages in case events change. Every class you create a
 All services used in the bundles are actually aliases to real implementations. If you want to override services all you 
 have to do is create your own services and override the aliases in the build method in your Kernel. 
 
-Beware that if you start to override services stuff can and will break because auto configuration uses a lot of the default
+Beware that if you start to override services stuff can and will break because autoconfiguration uses a lot of the default
 implementations.
 
 | Alias                                      | Interface                                             | Breaks auto configuration |
