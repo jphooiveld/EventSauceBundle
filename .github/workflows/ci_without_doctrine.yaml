@@ -1,0 +1,39 @@
+name: 'Tests without Doctrine Message Repository'
+
+on:
+    push:
+        branches:
+            - master
+            - 2.x
+
+jobs:
+
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        strategy:
+            max-parallel: 10
+            matrix:
+                php: ['8.0', '8.1']
+
+        steps:
+            - name: Set up PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  tools: phpstan
+                  coverage: pcov
+
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Download dependencies
+              run: |
+                  composer config minimum-stability dev
+                  composer update --no-interaction --prefer-dist --optimize-autoloader --prefer-stable
+
+            - name: Run tests
+              run: ./vendor/bin/simple-phpunit
+
+            - name: Run PHPStan
+              run: phpstan analyse

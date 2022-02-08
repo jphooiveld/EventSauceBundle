@@ -1,4 +1,4 @@
-name: Tests
+name: 'Tests with Doctrine Message Repository version 2'
 
 on:
     push:
@@ -31,6 +31,7 @@ jobs:
               run: |
                   composer config minimum-stability dev
                   composer update --no-interaction --prefer-dist --optimize-autoloader --prefer-stable
+                  composer require --no-interaction eventsauce/message-repository-for-doctrine-v2 
 
             - name: Run tests
               run: ./vendor/bin/simple-phpunit
