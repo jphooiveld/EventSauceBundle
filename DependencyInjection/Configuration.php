@@ -63,7 +63,7 @@ final class Configuration implements ConfigurationInterface
                             ->children()
                                 ->booleanNode('enabled')
                                     ->info('Use doctrine as default message repository. If you turn this off you must provide your own service.')
-                                    ->defaultValue(true)
+                                    ->defaultValue(false)
                                 ->end()
                                 ->scalarNode('connection')
                                     ->info('Service that implements a doctrine connection. We assume doctrine bundle default here.')

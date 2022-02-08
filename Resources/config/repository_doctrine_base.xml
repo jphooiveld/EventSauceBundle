@@ -15,14 +15,5 @@
         <service id="jphooiveld_eventsauce.uuid_encoder.binary" class="EventSauce\UuidEncoding\BinaryUuidEncoder" public="false"/>
 
         <service id="jphooiveld_eventsauce.uuid_encoder" alias="jphooiveld_eventsauce.uuid_encoder.string"/>
-
-        <service id="jphooiveld_eventsauce.message_repository.doctrine" class="EventSauce\MessageRepository\DoctrineV2MessageRepository\DoctrineUuidV4MessageRepository" public="false">
-            <argument/>
-            <argument>%jphooiveld_eventsauce.repository.doctrine.table%</argument>
-            <argument type="service" id="jphooiveld_eventsauce.message_serializer"/>
-            <argument>%jphooiveld_eventsauce.repository.doctrine.json_encode_options%</argument>
-            <argument type="service" id="jphooiveld_eventsauce.table_schema"/>
-            <argument type="service" id="jphooiveld_eventsauce.uuid_encoder"/>
-        </service>
     </services>
 </container>

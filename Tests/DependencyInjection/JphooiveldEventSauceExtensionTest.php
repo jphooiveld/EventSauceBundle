@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Jphooiveld\Bundle\EventSauceBundle\Tests\DependencyInjection;
 
 use EventSauce\EventSourcing\MessageConsumer;
+use EventSauce\MessageRepository\DoctrineMessageRepository\DoctrineUuidV4MessageRepository as DoctrineUuidV4MessageRepositoryV3;
+use EventSauce\MessageRepository\DoctrineV2MessageRepository\DoctrineUuidV4MessageRepository as DoctrineUuidV4MessageRepositoryV2;
 use Exception;
 use Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\JphooiveldEventSauceExtension;
 use PHPUnit\Framework\TestCase;
@@ -130,12 +132,17 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
      */
     public function test_repository_with_doctrine(): void
     {
+        if (!class_exists(DoctrineUuidV4MessageRepositoryV3::class) && !class_exists(DoctrineUuidV4MessageRepositoryV2::class)) {
+            $this->markTestSkipped('Can only test with Doctrine Message Repository enabled');
+        }
+
         $configuration = new ContainerBuilder();
         $loader        = new JphooiveldEventSauceExtension();
         $config        = $this->getDefaultConfig();
 
-        $config['message_repository']['service']           = 'foo';
-        $config['message_repository']['doctrine']['table'] = 'bar';
+        $config['message_repository']['service']             = 'foo';
+        $config['message_repository']['doctrine']['enabled'] = true;
+        $config['message_repository']['doctrine']['table']   = 'bar';
 
         $loader->load([$config], $configuration);
 
@@ -172,7 +179,7 @@ messenger:
 message_repository:
     service: jphooiveld_eventsauce.message_repository.doctrine
     doctrine:
-        enabled: true
+        enabled: false
         connection: doctrine.dbal.default_connection
         table: event
         json_encode_options:

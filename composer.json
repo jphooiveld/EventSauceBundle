@@ -23,7 +23,7 @@
         "php": "^8.0",
         "ext-json": "*",
         "eventsauce/eventsauce": "^1.0",
-        "eventsauce/message-repository-for-doctrine-v2": "^0.2",
+        "eventsauce/message-repository-for-doctrine": "^0.2",
         "symfony/console": "^5.4|^6.0",
         "symfony/messenger": "^5.4|^6.0",
         "symfony/config": "^5.4|^6.0",
@@ -33,7 +33,6 @@
     },
     "require-dev": {
         "eventsauce/test-utilities": "^1.0",
-        "doctrine/dbal": "^2.0",
         "roave/security-advisories": "dev-latest",
         "symfony/framework-bundle": "^5.4|^6.0",
         "symfony/yaml": "^5.4|^6.0",
@@ -46,6 +45,8 @@
         "friendsofphp/php-cs-fixer": "^3.0"
     },
     "suggest": {
+        "eventsauce/message-repository-for-doctrine": "Use Doctrine message repository to persist events with Doctrine DBAL version 3.",
+        "eventsauce/message-repository-for-doctrine-v2": "Use Doctrine message repository to persist events with Doctrine DBAL version 2.",
         "symfony/console": "Using symfony console to create event sourcing table",
         "symfony/messenger": "Using symfony messenger as event bus"
     },

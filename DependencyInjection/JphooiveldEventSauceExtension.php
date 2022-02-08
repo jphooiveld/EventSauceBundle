@@ -8,6 +8,8 @@ use EventSauce\Clock\Clock;
 use EventSauce\EventSourcing\MessageConsumer;
 use EventSauce\EventSourcing\MessageDecorator;
 use EventSauce\EventSourcing\Upcasting\Upcaster;
+use EventSauce\MessageRepository\DoctrineMessageRepository\DoctrineUuidV4MessageRepository as DoctrineUuidV4MessageRepositoryV3;
+use EventSauce\MessageRepository\DoctrineV2MessageRepository\DoctrineUuidV4MessageRepository as DoctrineUuidV4MessageRepositoryV2;
 use Exception;
 use LogicException;
 use Symfony\Component\Config\FileLocator;
@@ -55,9 +57,19 @@ final class JphooiveldEventSauceExtension extends Extension
         $container->setAlias('jphooiveld_eventsauce.message_repository', $config['message_repository']['service']);
 
         if ($config['message_repository']['doctrine']['enabled'] === true) {
+            if (!class_exists(DoctrineUuidV4MessageRepositoryV3::class) && !class_exists(DoctrineUuidV4MessageRepositoryV2::class)) {
+                throw new LogicException('Doctrine message repository cannot be enabled as the Doctrine Message Repository is not installed. Try running "composer require eventsauce/message-repository-for-doctrine" for Doctrine DBAL version 3 or. "composer require eventsauce/message-repository-for-doctrine-v2" for Doctrine DBAL version 2');
+            }
+
             $jsonOptions = array_reduce($config['message_repository']['doctrine']['json_encode_options'], static function($a, $b) { return $a | $b; }, 0);
 
-            $loader->load('repository_doctrine.xml');
+            $loader->load('repository_doctrine_base.xml');
+
+            if (class_exists(DoctrineUuidV4MessageRepositoryV3::class)) {
+                $loader->load('repository_doctrine_v3.xml');
+            } else {
+                $loader->load('repository_doctrine_v2.xml');
+            }
 
             $container->setAlias('jphooiveld_eventsauce.message_repository', 'jphooiveld_eventsauce.message_repository.doctrine');
             $container->setParameter('jphooiveld_eventsauce.repository.doctrine.table', $config['message_repository']['doctrine']['table']);
