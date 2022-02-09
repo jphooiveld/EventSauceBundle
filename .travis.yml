@@ -22,19 +22,19 @@ matrix:
     include:
         - php: 8.0
           env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="max[self]=0"
-        - php: 8.1.2
+        - php: 8.1.0
           env: COMPOSER_FLAGS="--prefer-stable" SYMFONY_DEPRECATIONS_HELPER="max[self]=0"
 
-        - php: 8.1.2
+        - php: 8.1.0
           env: COVERAGE=true PHPUNIT_FLAGS="-v --coverage-text"
 
         - php: 8.0
           env: DEPENDENCIES="symfony/lts:^4" STABILITY="dev"
-        - php: 8.1.2
+        - php: 8.1.0
           env: DEPENDENCIES="symfony/lts:^4" STABILITY="dev"
 
         - php: 8.0snapshot
-        - php: 8.1.2snapshot
+        - php: 8.1.0snapshot
 
 before_install:
     - if [[ $COVERAGE != true ]]; then phpenv config-rm xdebug.ini || true; fi
