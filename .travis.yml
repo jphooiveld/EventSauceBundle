@@ -31,10 +31,9 @@ matrix:
         - php: 8.0
           env: SYMFONY_REQUIRE="4.*" STABILITY="dev"
         - php: 8.1.0
-          env: SYMFONY_REQUIRE="4.*" STABILITY="dev"
+          env: DEPENDENCIES="symfony/lts:^4" STABILITY="dev"
 
         - php: 8.0snapshot
-        - php: 8.1.0snapshot
 
 before_install:
     - if [[ $COVERAGE != true ]]; then phpenv config-rm xdebug.ini || true; fi
