@@ -29,9 +29,9 @@ matrix:
           env: COVERAGE=true PHPUNIT_FLAGS="-v --coverage-text"
 
         - php: 8.0
-          env: DEPENDENCIES="symfony/lts:^4" STABILITY="dev"
+          env: SYMFONY_REQUIRE="4.*" STABILITY="dev"
         - php: 8.1.0
-          env: DEPENDENCIES="symfony/lts:^4" STABILITY="dev"
+          env: SYMFONY_REQUIRE="4.*" STABILITY="dev"
 
         - php: 8.0snapshot
         - php: 8.1.0snapshot
