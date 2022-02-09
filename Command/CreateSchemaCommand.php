@@ -72,7 +72,7 @@ final class CreateSchemaCommand extends Command
         $table->addColumn('aggregate_root_id', 'guid');
         $table->addColumn('aggregate_root_version', 'integer');
         $table->addColumn('time_of_recording', 'datetime_immutable');
-        $table->addColumn('payload', 'json_array', ['PlatformOptions' => ['jsonb' => true]]);
+        $table->addColumn('payload', 'json', ['PlatformOptions' => ['jsonb' => true]]);
         $table->setPrimaryKey(['event_id']);
         $table->addIndex(['aggregate_root_id']);
         $table->addIndex(['time_of_recording']);
