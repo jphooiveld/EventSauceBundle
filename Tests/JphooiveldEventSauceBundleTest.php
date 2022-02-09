@@ -9,6 +9,7 @@ use Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\Compiler\MessageDecor
 use Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\Compiler\UpcasterCompilerPass;
 use Jphooiveld\Bundle\EventSauceBundle\JphooiveldEventSauceBundle;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
@@ -29,6 +30,9 @@ final class JphooiveldEventSauceBundleTest extends TestCase
         $this->assertContainsCompilerPass($passes, AggregateRepositoryCompilerPass::class);
     }
 
+    /**
+     * @param CompilerPassInterface[] $passes
+     */
     private function assertContainsCompilerPass(array $passes, string $class): void
     {
         $found = false;

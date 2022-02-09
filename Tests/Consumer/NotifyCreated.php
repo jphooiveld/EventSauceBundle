@@ -15,7 +15,7 @@ final class NotifyCreated implements MessageConsumer
     ) {
     }
 
-    public function applyTodoCreated(TodoCreated $event): void
+    private function applyTodoCreated(TodoCreated $event): void
     {
         $payload             = $event->toPayload();
         $this->storage->id   = $payload['id'];

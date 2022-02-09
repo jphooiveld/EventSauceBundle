@@ -4,10 +4,9 @@ declare(strict_types=1);
 namespace Jphooiveld\Bundle\EventSauceBundle\Tests\DependencyInjection;
 
 use EventSauce\EventSourcing\MessageConsumer;
-use EventSauce\MessageRepository\DoctrineMessageRepository\DoctrineUuidV4MessageRepository as DoctrineUuidV4MessageRepositoryV3;
-use EventSauce\MessageRepository\DoctrineV2MessageRepository\DoctrineUuidV4MessageRepository as DoctrineUuidV4MessageRepositoryV2;
 use Exception;
 use Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\JphooiveldEventSauceExtension;
+use Jphooiveld\Bundle\EventSauceBundle\Tests\HasDoctrineMessageRepositoryTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -20,11 +19,15 @@ use Symfony\Component\Yaml\Yaml;
  */
 final class JphooiveldEventSauceExtensionTest extends TestCase
 {
+    use HasDoctrineMessageRepositoryTrait;
+
     /**
      * @throws Exception
      */
     public function test_default_aliasses(): void
     {
+        self::checkSkipForDoctrineMessageRepository();
+
         $configuration = new ContainerBuilder();
         $loader        = new JphooiveldEventSauceExtension();
         $config        = $this->getDefaultConfig();
@@ -46,6 +49,8 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
      */
     public function test_timezone(): void
     {
+        self::checkSkipForDoctrineMessageRepository();
+
         $configuration = new ContainerBuilder();
         $loader        = new JphooiveldEventSauceExtension();
         $config        = $this->getDefaultConfig();
@@ -61,6 +66,8 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
      */
     public function test_dispatcher_synchronous(): void
     {
+        self::checkSkipForDoctrineMessageRepository();
+
         $configuration = new ContainerBuilder();
         $loader        = new JphooiveldEventSauceExtension();
         $config        = $this->getDefaultConfig();
@@ -83,6 +90,8 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
      */
     public function test_dispatcher_messenger(): void
     {
+        self::checkSkipForDoctrineMessageRepository();
+
         $configuration = new ContainerBuilder();
         $loader        = new JphooiveldEventSauceExtension();
         $config        = $this->getDefaultConfig();
@@ -132,9 +141,7 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
      */
     public function test_repository_with_doctrine(): void
     {
-        if (!class_exists(DoctrineUuidV4MessageRepositoryV3::class) && !class_exists(DoctrineUuidV4MessageRepositoryV2::class)) {
-            $this->markTestSkipped('Can only test with Doctrine Message Repository enabled');
-        }
+        self::checkSkipForDoctrineMessageRepository();
 
         $configuration = new ContainerBuilder();
         $loader        = new JphooiveldEventSauceExtension();
@@ -168,7 +175,7 @@ final class JphooiveldEventSauceExtensionTest extends TestCase
         $loader->load([$config], $configuration);
     }
 
-    private function getDefaultConfig()
+    private function getDefaultConfig(): mixed
     {
         $yaml = <<<EOF
 time_of_recording:
@@ -179,7 +186,7 @@ messenger:
 message_repository:
     service: jphooiveld_eventsauce.message_repository.doctrine
     doctrine:
-        enabled: false
+        enabled: true
         connection: doctrine.dbal.default_connection
         table: event
         json_encode_options:

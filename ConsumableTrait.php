@@ -8,7 +8,7 @@ use EventSauce\EventSourcing\Message;
 
 trait ConsumableTrait
 {
-    public function __invoke(Message $message)
+    public function __invoke(Message $message): void
     {
         $this->handle($message);
     }
