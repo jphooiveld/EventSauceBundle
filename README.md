@@ -9,18 +9,33 @@ before you install this bundle.
 
 ## Installation
 
-Use composer to install the bundle into your symfony project.
+Install the bundle into your symfony project.
 
     $ composer require jphooiveld/eventsauce-bundle
+
+Installing the bundle will give you an error because doctrine message repository is missing.
+You must install the doctrine message repository fromt the EventSauce project.
+Since the EventSauce project has a version for both Doctrine DBAL version 2.x and 3.x, it's impossible to use
+both at the same time, so you need to chooce the correct version yourself. The bundle will automatically
+check which version of the message repository is installed and load the appropriate services.
+
+If you use a project Doctrine DBAL version 3.x. you must install the package.
+
+    $ composer require eventsauce/message-repository-for-doctrine
+
+Or if you use a project with Doctrine DBAL version 2.x. you must install the package.
+
+    $ composer require eventsauce/message-repository-for-doctrine-v2
+
     
 If you want to use symfony messenger as dispatcher instead of the default dispatcher you must install 
-the composer package **symfony/messenger**.
+the package.
 
     $ composer require symfony/messenger
 
 
 If you want to use the console command to generate the database table for you, you must install the 
-composer package **symfony/console**.    
+package.
 
     $ composer require symfony/console
 
@@ -29,6 +44,7 @@ to the bundles.php in your config directory.
 
 ```php
 <?php
+
 return [
     Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
     Symfony\Bundle\SecurityBundle\SecurityBundle::class => ['all' => true],
@@ -65,7 +81,7 @@ jphooiveld_event_sauce:
                 - !php/const JSON_PRESERVE_ZERO_FRACTION
             # Table schema to use: default (EventSauce 1.x) or legacy (EventSauce 0.8.x)  
             table_schema: default
-            # UUID encpder to use: string or binary)  
+            # UUID encpder to use: string or binary   
             uuid_encoder: string
         # Configure provided aggregate roots to use the default repository implementations as created by the bundle 
         aggregates:
@@ -87,16 +103,15 @@ provide the service id of the event bus all messages will be handled by the mess
 
 ### Message repository
 
-The doctrine message component will automatically be installed as a dependency, otherwise there would be a non
-functioning application. But if you want to install another type of repository or create your own it's 
+The doctrine message component will automatically be installed as a dependency, otherwise there would be a 
+non-functioning application. But if you want to install another type of repository or create your own it's 
 easy to reference it in the service parameter. If doctrine is enabled (and it's by default) this will be
 ignored.
 
 Configuring aggregates is an easy way to bind your aggregates to the message repository with
-default EventSauce services. A compiler pass creates the services automatically internally, so you can bind 
-them to parameters in your services.yaml.
+default EventSauce services. A compiler pass creates the services automatically internally.
 
-Let's for example assume you have an aggregate root called Order
+Lets for example assume you have an aggregate root called Order
  
 ```php
 <?php
@@ -145,13 +160,13 @@ message repository as well as the snapshot repository.
 
 ## Auto configuration
 
-EventSauce has a number of interfaces that are auto configured when this bundle is installed to make your life a lot easier.
+EventSauce has a number of interfaces that are autoconfigured when this bundle is installed to make your life a lot easier.
 
 ### Consumers
 
 Consumers are responsible for handling events from the aggregates. The message dispatcher is responsible for delegating the
 events to the consumers. Every class you create and implements **EventSauce\EventSourcing\MessageConsumer** will automatically 
-receive events from the message dispatcher. However, if you intent to use Symfony messenger you must implement the __invoke
+receive events from the message dispatcher. However, if you intend to use Symfony messenger you must implement the __invoke
 method. To overcome this limitation you can use the **ConsumableTrait** provided in the bundle. This will make sure it will work
 with the default message dispatcher from EventSauce as wel as the symfony messenger component. The trait will also let consumer's
 handler the events the same way as the aggregate repository does. It will look for methods that start with apply and after that the
@@ -171,21 +186,21 @@ use Symfony\Component\Mime\RawMessage;
 
 class SendMailNotification implements MessageConsumer
 {
-        use ConsumableTrait;
+    use ConsumableTrait;
         
-        public function __construct(
-            private MailerInterface $mailer,
-        ) {
-        }
+    public function __construct(
+        private MailerInterface $mailer,
+    ) {
+    }
         
-        protected function applyOrderCreated(OrderCreated $event): void
-        {
-            $message = new RawMessage(); 
-            
-            // other code
-            
-            $this->mailer->send($message);
-        }
+    protected function applyOrderCreated(OrderCreated $event): void
+    {
+        $message = new RawMessage(); 
+
+        // other code
+          
+        $this->mailer->send($message);
+    }
 }
 ```
 
@@ -209,15 +224,15 @@ have to do is create your own services and override the aliases in the build met
 Beware that if you start to override services stuff can and will break because autoconfiguration uses a lot of the default
 implementations.
 
-| Alias                                      | Interface                                             | Breaks auto configuration |
-|--------------------------------------------|-------------------------------------------------------| --------------------------|
-| jphooiveld_eventsauce.clock                | EventSauce\Clock\Clock                                | no                        |
+| Alias                                      | Interface                                                | Breaks auto configuration |
+|--------------------------------------------|----------------------------------------------------------| --------------------------|
+| jphooiveld_eventsauce.clock                | EventSauce\Clock\Clock                                   | no                        |
 | jphooiveld_eventsauce.payload_serializer   | EventSauce\EventSourcing\Serialization\PayloadSerializer | no                        |
 | jphooiveld_eventsauce.message_serializer   | EventSauce\EventSourcing\Serialization\MessageSerializer | no                        |
-| jphooiveld_eventsauce.upcaster             | EventSauce\EventSourcing\Upcasting\Upcaster           | yes                       |
-| jphooiveld_eventsauce.inflector            | EventSauce\EventSourcing\ClassNameInflector           | no                        |
-| jphooiveld_eventsauce.message_decorator    | EventSauce\EventSourcing\MessageDecorator             | yes                       |
-| jphooiveld_eventsauce.message_dispatcher   | EventSauce\EventSourcing\MessageDispatcher            | yes                       |
+| jphooiveld_eventsauce.upcaster             | EventSauce\EventSourcing\Upcasting\Upcaster              | yes                       |
+| jphooiveld_eventsauce.inflector            | EventSauce\EventSourcing\ClassNameInflector              | no                        |
+| jphooiveld_eventsauce.message_decorator    | EventSauce\EventSourcing\MessageDecorator                | yes                       |
+| jphooiveld_eventsauce.message_dispatcher   | EventSauce\EventSourcing\MessageDispatcher               | yes                       |
 
 Let's say you want to create your own class inflector called **App\EventSourcing\UnderscoreInflector** 
 that implements interface  **EventSauce\EventSourcing\ClassNameInflector**. The only thing you need to do is set the 
@@ -242,6 +257,33 @@ class Kernel extends BaseKernel
     // other code
 }
 ```
+
+# Upgrading from version 1.x
+
+You must install the correct Doctrine Message Repository package from the EventSauce project when 
+upgrading to version 2.x of this bundle.
+
+A new option called **table_schema** has been added under the **message_repository** configuration.
+If you want to maintain backwards compatibility with your current database you will need to set it to **legacy**.
+
+You can remove any bindings for aggregate repositories from your service configuration as the bundle
+already configures that for you in the compiler pass through the method **registerAliasForArgument**.
+See example below for our Order aggregate.
+
+```yaml
+services:
+    _defaults:
+        bind:
+            # Line below here is no longer needed, compiler pass will take care of it
+            # EventSauce\EventSourcing\AggregateRootRepository $orderRepository: '@jphooiveld_eventsauce.aggregate_repository.order'
+
+```
+
+Some service configuration has changed. So if you have manually overriden anything you must check that configuration.
+
+For upgrading your code EventSauce provides a rector package. See https://github.com/EventSaucePHP/RectorFrom0to1. 
+Learn more about Rector at https://github.com/rectorphp/rector 
+
 
 # License
 
