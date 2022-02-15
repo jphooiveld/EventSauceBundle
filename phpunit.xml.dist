@@ -39,9 +39,11 @@
     </listeners>
     <coverage>
         <include>
-            <directory suffix=".php">.</directory>
             <directory suffix=".php">Command</directory>
             <directory suffix=".php">DependencyInjection</directory>
+            <file>ConsumableTrait.php</file>
+            <file>JphooiveldEventSauceBundle.php</file>
+            <file>MessengerDispatcher.php</file>
         </include>
     </coverage>
 </phpunit>
