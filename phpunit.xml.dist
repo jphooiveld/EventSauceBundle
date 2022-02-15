@@ -37,4 +37,11 @@
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
     </listeners>
+    <coverage>
+        <include>
+            <directory suffix="*.php">.</directory>
+            <directory suffix="*.php">Command</directory>
+            <directory suffix="*.php">DependencyInjection</directory>
+        </include>
+    </coverage>
 </phpunit>
