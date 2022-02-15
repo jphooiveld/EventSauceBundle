@@ -1,0 +1,22 @@
+tools:
+    external_code_coverage: true
+
+filter:
+    paths:
+        - "Command/*"
+        - "DependencyInjection/*"
+        - "*.php"
+    excluded_paths:
+        - "Resources/*"
+        - "Tests/*"
+
+checks:
+    php:
+        duplication: false
+
+build:
+    nodes:
+        analysis:
+            tests:
+                override:
+                    - php-scrutinizer-run
