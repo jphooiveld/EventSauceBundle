@@ -1,5 +1,9 @@
 # JphooiveldEventSauceBundle
+
 ![BUild status](https://github.com/jphooiveld/EventSauceBundle/actions/workflows/ci.yaml/badge.svg)
+![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jphooiveld/EventSauceBundle/badges/quality-score.png?b=2.x)
+![Code Coverage](https://scrutinizer-ci.com/g/jphooiveld/EventSauceBundle/badges/coverage.png?b=2.x)
+
 ## Info
 
 This bundle integrates EventSauce, and it's doctrine message repository into your symfony application.
