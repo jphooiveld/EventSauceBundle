@@ -14,6 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @covers \Jphooiveld\Bundle\EventSauceBundle\JphooiveldEventSauceBundle
+ * @covers \Jphooiveld\Bundle\EventSauceBundle\DependencyInjection\Compiler
  */
 final class JphooiveldEventSauceBundleTest extends TestCase
 {
