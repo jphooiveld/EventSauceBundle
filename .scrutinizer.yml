@@ -14,6 +14,8 @@ checks:
 build:
     dependencies:
         before:
+            - pecl install pcov
+        after:
             - composer require eventsauce/message-repository-for-doctrine
     tests:
         override:
