@@ -1,6 +1,3 @@
-tools:
-    external_code_coverage: true
-
 filter:
     paths:
         - "Command/*"
@@ -14,12 +11,11 @@ checks:
     php:
         duplication: false
 
-
 build:
     tests:
         override:
             -
-                command: SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT=1 ./vendor/bin/simple-phpunit --coverage-clover build/logs/clover.xml
+                command: ./vendor/bin/simple-phpunit --coverage-clover build/logs/clover.xml
                 coverage:
                     file: build/logs/clover.xml
                     format: clover
