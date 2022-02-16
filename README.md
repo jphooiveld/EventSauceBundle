@@ -1,4 +1,4 @@
-master# JphooiveldEventSauceBundle
+# JphooiveldEventSauceBundle
 
 ![BUild status](https://github.com/jphooiveld/EventSauceBundle/actions/workflows/ci.yaml/badge.svg)
 ![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jphooiveld/EventSauceBundle/badges/quality-score.png?b=master)
