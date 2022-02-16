@@ -1,8 +1,8 @@
-# JphooiveldEventSauceBundle
+master# JphooiveldEventSauceBundle
 
 ![BUild status](https://github.com/jphooiveld/EventSauceBundle/actions/workflows/ci.yaml/badge.svg)
-![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jphooiveld/EventSauceBundle/badges/quality-score.png?b=2.x)
-![Code Coverage](https://scrutinizer-ci.com/g/jphooiveld/EventSauceBundle/badges/coverage.png?b=2.x)
+![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jphooiveld/EventSauceBundle/badges/quality-score.png?b=master)
+![Code Coverage](https://scrutinizer-ci.com/g/jphooiveld/EventSauceBundle/badges/coverage.png?b=master)
 
 ## Info
 
