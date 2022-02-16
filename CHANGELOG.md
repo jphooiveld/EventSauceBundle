@@ -1,3 +1,6 @@
+2.0
+- Upgrade bundle to EventSauce 1.x
+
 1.3
 - Add configuration value for json encode options for doctrine message repository.
 
