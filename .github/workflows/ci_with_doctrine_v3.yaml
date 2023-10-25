@@ -11,6 +11,7 @@ jobs:
     build:
         name: Build
         runs-on: ubuntu-latest
+        container: shivammathur/node:latest-${{ matrix.arch }}
         strategy:
             max-parallel: 10
             matrix:
@@ -18,7 +19,7 @@ jobs:
 
         steps:
             - name: Set up PHP
-              uses: shivammathur/setup-php@v3
+              uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php }}
                   tools: phpstan
