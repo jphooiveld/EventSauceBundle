@@ -4,3 +4,5 @@ composer.lock
 *.sh
 *.cache
 /docker-compose.yml
+/Dockerfile
+/docker-compose.override.yml

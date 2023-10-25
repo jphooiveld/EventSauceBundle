@@ -25,7 +25,7 @@ final class TodoCreated implements SerializablePayload
     /**
      * @param mixed[] $payload
      */
-    public static function fromPayload(array $payload): self
+    public static function fromPayload(array $payload): static
     {
         $self       = new self();
         $self->id   = $payload['id'];

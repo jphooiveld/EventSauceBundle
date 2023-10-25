@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/9.5/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.4/phpunit.xsd"
          colors="true"
-         verbose="true"
          failOnRisky="true"
          failOnWarning="true"
          backupGlobals="true"
-         forceCoversAnnotation="true"
          executionOrder="depends,defects"
-         beStrictAboutCoversAnnotation="true"
          beStrictAboutOutputDuringTests="true"
-         beStrictAboutTodoAnnotatedTests="true"
          bootstrap="vendor/autoload.php"
->
+         cacheDirectory=".phpunit.cache"
+         requireCoverageMetadata="true"
+         beStrictAboutCoverageMetadata="true"
+    >
     <php>
         <ini name="assert.exception" value="1"/>
         <ini name="date.timezone" value="Europe/Amsterdam"/>
@@ -26,18 +24,15 @@
         <ini name="memory_limit" value="-1"/>
         <ini name="xdebug.show_exception_trace" value="0"/>
         <ini name="zend.assertions" value="1"/>
-        <env name="SHELL_VERBOSITY" value="-1" />
-        <env name="SYMFONY_PHPUNIT_VERSION" value="9.5"/>
+        <env name="SHELL_VERBOSITY" value="-1"/>
     </php>
     <testsuites>
         <testsuite name="JphooiveldEventSauceBundle Test Suite">
             <directory>./Tests/</directory>
         </testsuite>
     </testsuites>
-    <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
-    </listeners>
-    <coverage>
+    <coverage/>
+    <source>
         <include>
             <directory suffix=".php">Command</directory>
             <directory suffix=".php">DependencyInjection</directory>
@@ -45,5 +40,5 @@
             <file>JphooiveldEventSauceBundle.php</file>
             <file>MessengerDispatcher.php</file>
         </include>
-    </coverage>
+    </source>
 </phpunit>
