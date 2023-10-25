@@ -29,7 +29,7 @@ final class AggregateRepositoryCompilerPass implements CompilerPassInterface
     {
         $snapshotEnabled = $container->getParameter('jphooiveld_eventsauce.snapshot_repository.enabled');
 
-        /** @var class-string<AggregateRoot>[] $classNames */
+        /** @var class-string[] $classNames */
         $classNames = $container->getParameter('jphooiveld_eventsauce.message_repository.aggregates');
 
         foreach ($classNames as $className) {

@@ -77,13 +77,8 @@ final class CreateSchemaCommand extends Command
             $table->addUniqueIndex(['aggregate_root_id', 'version']);
         }
 
+        /** @var AbstractPlatform $platform */
         $platform = $this->connection->getDatabasePlatform();
-
-        if (!($platform instanceof AbstractPlatform)) {
-            $output->writeln('<error>No database platform was found</error>');
-            return 1;
-        }
-
         $queries  = $schema->toSql($platform);
 
         foreach ($queries as $query) {
