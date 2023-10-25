@@ -66,6 +66,7 @@ final class JphooiveldEventSauceExtension extends Extension
 
             $loader->load('repository_doctrine_base.xml');
 
+            /** @phpstan-ignore-next-line */
             if (class_exists(DoctrineUuidV4MessageRepositoryV3::class)) {
                 $loader->load('repository_doctrine_v3.xml');
             } else {
