@@ -35,7 +35,7 @@ jobs:
                   composer require --no-interaction eventsauce/message-repository-for-doctrine 
 
             - name: Run tests
-              run: ./vendor/bin/simple-phpunit
+              run: ./vendor/bin/phpunit
 
             - name: Run PHPStan
               run: phpstan analyse
