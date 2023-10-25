@@ -11,3 +11,7 @@ parameters:
         - Resources
         - Tests
         - vendor
+    ignoreErrors:
+        -
+            message: '#Fetching class constant class of deprecated class#'
+            path: DependencyInjection/JphooiveldEventSauceExtension.php

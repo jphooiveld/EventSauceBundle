@@ -57,7 +57,6 @@ final class JphooiveldEventSauceExtension extends Extension
         $container->setAlias('jphooiveld_eventsauce.message_repository', $config['message_repository']['service']);
 
         if ($config['message_repository']['doctrine']['enabled'] === true) {
-            /** @phpstan-ignore-next-line */
             if (!class_exists(DoctrineUuidV4MessageRepositoryV3::class) && !class_exists(DoctrineUuidV4MessageRepositoryV2::class)) {
                 throw new LogicException('Doctrine message repository cannot be enabled as the Doctrine Message Repository is not installed. Try running "composer require eventsauce/message-repository-for-doctrine" for Doctrine DBAL version 3 or. "composer require eventsauce/message-repository-for-doctrine-v2" for Doctrine DBAL version 2');
             }
@@ -66,7 +65,6 @@ final class JphooiveldEventSauceExtension extends Extension
 
             $loader->load('repository_doctrine_base.xml');
 
-            /** @phpstan-ignore-next-line */
             if (class_exists(DoctrineUuidV4MessageRepositoryV3::class)) {
                 $loader->load('repository_doctrine_v3.xml');
             } else {
