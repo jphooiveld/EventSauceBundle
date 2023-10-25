@@ -34,6 +34,7 @@ final class CreateSchemaCommand extends Command
     protected function configure(): void
     {
         $this->setDefinition([
+            new InputOption('legacy', null, InputOption::VALUE_NONE),
             new InputOption('force', null, InputOption::VALUE_NONE),
         ]);
     }
@@ -52,14 +53,29 @@ final class CreateSchemaCommand extends Command
 
         $schema = new Schema();
         $table  = $schema->createTable($this->table);
-        $table->addColumn('event_id', 'guid');
-        $table->addColumn('aggregate_root_id', 'guid');
-        $table->addColumn('version', 'integer');
-        $table->addColumn('payload', 'json', ['PlatformOptions' => ['jsonb' => true]]);
-        $table->setPrimaryKey(['event_id']);
-        $table->addIndex(['aggregate_root_id']);
-        $table->addIndex(['aggregate_root_id', 'version']);
-        $table->addUniqueIndex(['aggregate_root_id', 'version']);
+
+        if ($input->getOption('legacy')) {
+            $table->addColumn('event_id', 'guid');
+            $table->addColumn('event_type', 'string', ['length' => 255]);
+            $table->addColumn('aggregate_root_id', 'guid');
+            $table->addColumn('aggregate_root_version', 'integer');
+            $table->addColumn('payload', 'json', ['PlatformOptions' => ['jsonb' => true]]);
+            $table->addColumn('time_of_recording', 'datetimetz_immutable');
+            $table->setPrimaryKey(['event_id']);
+            $table->addIndex(['time_of_recording']);
+            $table->addIndex(['aggregate_root_id']);
+            $table->addIndex(['aggregate_root_id', 'version']);
+            $table->addUniqueIndex(['aggregate_root_id', 'version']);
+        } else {
+            $table->addColumn('event_id', 'guid');
+            $table->addColumn('aggregate_root_id', 'guid');
+            $table->addColumn('version', 'integer');
+            $table->addColumn('payload', 'json', ['PlatformOptions' => ['jsonb' => true]]);
+            $table->setPrimaryKey(['event_id']);
+            $table->addIndex(['aggregate_root_id']);
+            $table->addIndex(['aggregate_root_id', 'version']);
+            $table->addUniqueIndex(['aggregate_root_id', 'version']);
+        }
 
         $platform = $this->connection->getDatabasePlatform();
 
