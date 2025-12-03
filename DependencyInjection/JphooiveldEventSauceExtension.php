@@ -15,7 +15,7 @@ use LogicException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Console\Application;
@@ -28,23 +28,23 @@ final class JphooiveldEventSauceExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $loader        = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader        = new PhpFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $configuration = new Configuration();
         $config        = $this->processConfiguration($configuration, $configs);
 
-        $loader->load('dispatcher.xml');
-        $loader->load('headers.xml');
-        $loader->load('inflector.xml');
-        $loader->load('aggregate_repository.xml');
-        $loader->load('serializer.xml');
-        $loader->load('upcasting.xml');
+        $loader->load('dispatcher.php');
+        $loader->load('headers.php');
+        $loader->load('inflector.php');
+        $loader->load('aggregate_repository.php');
+        $loader->load('serializer.php');
+        $loader->load('upcasting.php');
 
         if ($config['messenger']['enabled'] === true) {
             if (!interface_exists(MessageBusInterface::class)) {
                 throw new LogicException('Symfony messenger dispatcher cannot be enabled as the component is not installed. Try running "composer require symfony/messenger".');
             }
 
-            $loader->load('dispatcher_messenger.xml');
+            $loader->load('dispatcher_messenger.php');
             $container->setAlias('jphooiveld_eventsauce.message_dispatcher', 'jphooiveld_eventsauce.message_dispatcher.messenger');
             $container->registerForAutoconfiguration(MessageConsumer::class)->addTag('messenger.message_handler', ['bus' => $config['messenger']['service_bus']]);
 
@@ -63,12 +63,12 @@ final class JphooiveldEventSauceExtension extends Extension
 
             $jsonOptions = array_reduce($config['message_repository']['doctrine']['json_encode_options'], static function($a, $b) { return $a | $b; }, 0);
 
-            $loader->load('repository_doctrine_base.xml');
+            $loader->load('repository_doctrine_base.php');
 
             if (class_exists(DoctrineUuidV4MessageRepositoryV3::class)) {
-                $loader->load('repository_doctrine_v3.xml');
+                $loader->load('repository_doctrine_v3.php');
             } else {
-                $loader->load('repository_doctrine_v2.xml');
+                $loader->load('repository_doctrine_v2.php');
             }
 
             $container->setAlias('jphooiveld_eventsauce.message_repository', 'jphooiveld_eventsauce.message_repository.doctrine');
@@ -87,7 +87,7 @@ final class JphooiveldEventSauceExtension extends Extension
             $definition->setArgument(0, new Reference($config['message_repository']['doctrine']['connection']));
 
             if (class_exists(Application::class)) {
-                $loader->load('repository_doctrine_command.xml');
+                $loader->load('repository_doctrine_command.php');
                 $definition = $container->getDefinition('jphooiveld_eventsauce.command.create_schema');
                 $definition->setArgument(0, new Reference($config['message_repository']['doctrine']['connection']));
             }
@@ -98,7 +98,7 @@ final class JphooiveldEventSauceExtension extends Extension
                 throw new LogicException('You must set a valid snapshot service when snapshotting is enabled.');
             }
 
-            $loader->load('snapshot_repository.xml');
+            $loader->load('snapshot_repository.php');
             $container->setAlias('jphooiveld_eventsauce.snapshot_repository', $config['snapshot_repository']['service']);
         }
 
@@ -108,6 +108,5 @@ final class JphooiveldEventSauceExtension extends Extension
         $container->registerForAutoconfiguration(MessageDecorator::class)->addTag('eventsauce.message_decorator');
         $container->registerForAutoconfiguration(Upcaster::class)->addTag('eventsauce.upcaster');
         $container->registerAliasForArgument('jphooiveld_eventsauce.clock', Clock::class, 'clock');
-
     }
 }

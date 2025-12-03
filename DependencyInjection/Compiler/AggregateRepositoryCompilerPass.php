@@ -36,8 +36,8 @@ final class AggregateRepositoryCompilerPass implements CompilerPassInterface
             if (is_a($className, AggregateRoot::class, true)) {
                 $reflectionClass    = new ReflectionClass($className);
                 $shortClassName     = $reflectionClass->getShortName();
-                $servicePostFix     = (new ByteString($shortClassName))->snake();
-                $repositoryArgument = (new ByteString($shortClassName))->camel() . 'Repository';
+                $servicePostFix     = new ByteString($shortClassName)->snake();
+                $repositoryArgument = new ByteString($shortClassName)->camel() . 'Repository';
                 $serviceId          = sprintf('jphooiveld_eventsauce.aggregate_repository.%s', $servicePostFix);
 
                 if ($container->hasDefinition($serviceId)) {

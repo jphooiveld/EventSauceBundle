@@ -8,53 +8,40 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Schema\SchemaException;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
-final class CreateSchemaCommand extends Command
+#[AsCommand('eventsauce:create-schema')]
+final readonly class CreateSchemaCommand
 {
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'eventsauce:create-schema';
-
     public function __construct(
         private Connection $connection,
         private string $table,
     ) {
-        parent::__construct();
     }
 
     /**
-     * @inheritDoc
-     */
-    protected function configure(): void
-    {
-        $this->setDefinition([
-            new InputOption('legacy', null, InputOption::VALUE_NONE),
-            new InputOption('force', null, InputOption::VALUE_NONE),
-        ]);
-    }
-
-    /**
-     * @inheritDoc
      * @throws DBALException
-     * @throws SchemaException
      */
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    public function __invoke(
+        SymfonyStyle $io,
+        #[Option]
+        bool $legacy = false,
+        #[Option]
+        bool $force = false,
+    ): int
     {
-        if (!$input->getOption('force')) {
-            $output->writeln('You must use the --force option to execute this command.');
+        if (!$force) {
+            $io->writeln('You must use the --force option to execute this command.');
             return 1;
         }
 
         $schema = new Schema();
         $table  = $schema->createTable($this->table);
 
-        if ($input->getOption('legacy')) {
+        if ($legacy) {
             $table->addColumn('event_id', 'guid');
             $table->addColumn('event_type', 'string', ['length' => 255]);
             $table->addColumn('aggregate_root_id', 'guid');
@@ -85,8 +72,8 @@ final class CreateSchemaCommand extends Command
             $this->connection->executeStatement($query);
         }
 
-        $output->writeln(sprintf('Table %s created', $this->table));
+        $io->writeln(sprintf('Table %s created', $this->table));
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
